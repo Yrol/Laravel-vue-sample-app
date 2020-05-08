@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\QuestionResource;
 use App\Model\Questions;
 use Illuminate\Http\Request;
 use Symfony\Component\Console\Question\Question;
@@ -17,7 +18,7 @@ class QuestionsController extends Controller
     public function index()
     {
         //Using Eloquent to get all the news in latest order
-        return Questions::latest()->get();
+        return new QuestionResource(Questions::latest()->get());
     }
 
     /**
@@ -62,7 +63,7 @@ class QuestionsController extends Controller
      */
 
     public function show(Questions $question){
-        return $question;
+        return new QuestionResource($question);
     }
 
     // public function show($id)
