@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Model\Questions;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\HttpFoundation\Response;
 
 class QuestionsController extends Controller
 {
@@ -14,7 +16,8 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        //
+        //Using Eloquent to get all the news in latest order
+        return Questions::latest()->get();
     }
 
     /**
@@ -28,26 +31,58 @@ class QuestionsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Storing the questions.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        //Method 1 - defining everything one by one
+        // $question = new Questions;
+        // $question->title = $request->title;
+        // $question->slug = $request->slug;
+        // $question->body = $request->body;
+        // $question->category_id = $request->category_id;
+        // $question->user_id = $request->user_id;
+        // $question->save();
+
+
+        //Method 2 - one liner, this will save everything that will come in the request
+        //when we use this method, we must make sure the "$fillable" variable is specified with mandatory fields in the relevant controller (in this case "/app/Http/Controllers/QuestionsController.php")
+        Questions::create($request->all());
+        return response('Created', Response::HTTP_CREATED);//on completion return success (HTTP_CREATED - 201)
     }
 
     /**
-     * Display the specified resource.
+     * Display a specific question by ID.
      *
      * @param  \App\Model\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function show(Questions $questions)
-    {
-        //
+
+    public function show(Questions $question){
+        return $question;
     }
+
+    // public function show($id)
+    // {
+    //     $question = Questions::where('id', $id)->firstOrFail();
+    //     return response()->json($question);
+    // }
+
+    // /**
+    //  * Display a specific question by slug.
+    //  *
+    //  * @param  \App\Model\Questions  $questions
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function slug($slug)
+    // {
+    //     $question = Questions::where('slug', $slug)->firstOrFail();
+    //     return response()->json($question);
+    // }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -78,8 +113,10 @@ class QuestionsController extends Controller
      * @param  \App\Model\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Questions $questions)
+    public function destroy($id)
     {
-        //
+        Questions::destroy($id);
+        //outputting the  204 response using the Response defined in "/vendor/symfony/http-foundation/Response.php" to get the pre-defined responses
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

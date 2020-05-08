@@ -23,7 +23,7 @@ class CreateRepliesTable extends Migration
             $table->integer('user_id');
 
             //Foreign key for deleting (cascading) all the replies when the question is deleted
-            //Delete all the replies where the "question_id" of replies equals to the "id" of the questions table. 
+            //Delete all the replies where the "question_id" of replies equals to the "id" of the Questions table. 
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
 
         });

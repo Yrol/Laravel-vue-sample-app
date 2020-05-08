@@ -46,15 +46,15 @@ class User extends Authenticatable
         return $this->hasMany(Questions::class);
     }
 
-     //Replies relationship - A User could have many replies
-    public function replies()
-    {
-        return $this->hasMany(Replies::class);
-    }
+    //  //Replies relationship - A User could have many replies
+    // public function replies()
+    // {
+    //     return $this->hasMany(Replies::class);
+    // }
 
-     //Likes relationship - A User could have many likes
-    public function likes()
-    {
-        return $this->hasMany(Likes::class);
-    }
+    //  //Likes relationship - A User could have many likes
+    // public function likes()
+    // {
+    //     return $this->hasMany(Likes::class);
+    // }
 }

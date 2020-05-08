@@ -6,7 +6,9 @@ use App\Model\Categories;
 use Faker\Generator as Faker;
 
 $factory->define(Categories::class, function (Faker $faker) {
-    return [
-        //
+    $word = $faker->word;//randomly generated word by Laravel
+    return [ 
+        'name' => $word,
+        'slug' => str_slug($word)
     ];
 });
