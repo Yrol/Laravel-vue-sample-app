@@ -45,7 +45,7 @@ class QuestionsController extends Controller
         //Method 1 - defining everything one by one
         // $question = new Questions;
         // $question->title = $request->title;
-        // $question->slug = $request->slug;
+        // $question->slug = str_slug($request->title); //using the Laravel's helper method "str_slug" tpo create a title out of title text
         // $question->body = $request->body;
         // $question->category_id = $request->category_id;
         // $question->user_id = $request->user_id;
@@ -119,7 +119,7 @@ class QuestionsController extends Controller
         // $question->fill($new_data);
         // $question->save();
 
-        //one liner
+        //one liner inside try catch
         try {
             $question->update($request->all());
         } catch (\Illuminate\Database\QueryException $e) {
@@ -129,13 +129,18 @@ class QuestionsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
+     * Removing a specific question
+     * Delete by slug: http://localhost:8080/api/questions/this-is-the-new-title
+     * Delete by  ID: http://localhost:8080/api/questions/1
      * @param  \App\Model\Questions  $questions
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
+        //Method 1
+        //$question->delete();//question need to be passed as a variable (Question $question) instead of the $id -  assuming we are using the "slug" to identify each record
+
+        //Method 2
         Questions::destroy($id);
         //outputting the  204 response using the Response defined in "/vendor/symfony/http-foundation/Response.php" to get the pre-defined responses
         return response(null, Response::HTTP_NO_CONTENT);
