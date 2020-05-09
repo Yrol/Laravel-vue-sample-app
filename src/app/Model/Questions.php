@@ -25,6 +25,7 @@ class Questions extends Model
     //protected $fillable = ['title', 'slug', 'body', 'category_id', 'user_id'];
 
     //We can use "guarded" if we choose not to use above $fillable. We can leave the array empty. This will also prevent the "Mask assignment" issue
+    //If we add a field name to the guard array, it means those fields cannot be updated
     protected $guarded = [];
 
     //User relationship -  A Question belongs to (belongsTo) a User

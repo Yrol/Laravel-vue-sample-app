@@ -17,8 +17,11 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        //Using Eloquent to get all the news in latest order
-        return new QuestionResource(Questions::latest()->get());
+        //Using Eloquent to get all the news in latest order. This is wil expose all the data
+        //return Questions::latest()->get();
+
+        //Using the "QuestionResource" API Resource wrapper to expose only the specified data
+        return QuestionResource::collection(Questions::latest()->get());
     }
 
     /**
@@ -63,6 +66,11 @@ class QuestionsController extends Controller
      */
 
     public function show(Questions $question){
+
+        //Return a single record
+        //return $question;
+
+        //Return a single record using the "QuestionResource" wrapper which will expose only the specified data
         return new QuestionResource($question);
     }
 
@@ -103,9 +111,21 @@ class QuestionsController extends Controller
      * @param  \App\Model\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Questions $questions)
+    public function update(Request $request, Questions $question)
     {
-        //
+        //Multiple lines search the record by ID (in this case we should replace the "Questions $question" argument with $id and pass the ID in the API request)
+        // $question = Questions::where('id', $id)->first();
+        // $new_data = $request->all();
+        // $question->fill($new_data);
+        // $question->save();
+
+        //one liner
+        try {
+            $question->update($request->all());
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response('An error occurred', Response::HTTP_BAD_GATEWAY);
+        }
+        return response("Updated", Response::HTTP_ACCEPTED);
     }
 
     /**
