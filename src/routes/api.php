@@ -4,11 +4,15 @@ use App\Model\Questions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-//Routes for Questions
+//Route for Questions
 Route::apiResource('questions', 'QuestionsController');
 
-//Routed for Categories
+//Route for Categories
 Route::apiResource('categories', 'CategoriesController');
+
+//Route for replies - "questions/{question ID or slug}/reply/"
+Route::apiResource('question/{question}/reply', 'RepliesController');
+
 
 // Route::get('/questions/{question:slug}', function (Questions $question) {
 //     return $question;

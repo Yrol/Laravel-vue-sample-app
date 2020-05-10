@@ -37,7 +37,9 @@ class Questions extends Model
     //Reply relationship - A Question can have many (hasMany) Replies
     public function replies()
     {
-        return $this->hasMany(Replies::class);
+        // In here defining the Foreign key explicitly is not a must and it'll be handled automatically by Laravel by default, however we can defined it if we want the column name to be specific.
+        // "question_id" is the foreign key that will be in the Replies table which  will reference the "id" column of the Questions table
+        return $this->hasMany(Replies::class, 'question_id', 'id');
     }
 
     //Category relationship - A Question belongs to a Category

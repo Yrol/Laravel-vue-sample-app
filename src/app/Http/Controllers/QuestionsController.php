@@ -135,13 +135,13 @@ class QuestionsController extends Controller
      * @param  \App\Model\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Questions $question)
     {
         //Method 1
-        //$question->delete();//question need to be passed as a variable (Question $question) instead of the $id -  assuming we are using the "slug" to identify each record
+        $question->delete();
 
         //Method 2
-        Questions::destroy($id);
+        //Questions::destroy($id); //An ID variable need to be passed as an argument ("public function destroy($id)") instead of "Question $question" and need to make sure default identifier is not "slug"
         //outputting the  204 response using the Response defined in "/vendor/symfony/http-foundation/Response.php" to get the pre-defined responses
         return response(null, Response::HTTP_NO_CONTENT);
     }
