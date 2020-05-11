@@ -43,7 +43,7 @@ class RepliesController extends Controller
     }
 
     /**
-     * Displaying a specific reply reply belong a specific Question
+     * Displaying a specific reply belonging to a specific Question
      * API Route: "api/question/{question}/reply/{reply}" - in here the reply value ({reply}) must be the reply ID
      * @param  \App\Model\Replies  $replies
      * @return \Illuminate\Http\Response

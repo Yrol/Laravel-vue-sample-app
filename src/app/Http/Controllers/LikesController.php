@@ -3,83 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Model\Likes;
-use Illuminate\Http\Request;
+use App\Model\Replies;
+use Symfony\Component\HttpFoundation\Response;
 
 class LikesController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
+     * Adding a like to a reply
+     * API Route: "api/like/{reply_id}"
+     * Ex: http://localhost:8080/api/like/52 - Create a Like for Reply 52.
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function like(Replies $reply)
     {
-        //
+        //in here we don't have to provide the "reply_id" since it'll be automatically injected as its already defined in "Reply" model "like" function: "$this->hasMany(Likes::class);"
+        $reply->likes()->create([
+            //'user_id' => auth()->id()
+            'user_id' => '1' // hard code the user ID for now
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
+     * Adding a like to a reply
+     * API Route: "api/like/{reply_id}"
+     * Ex: http://localhost:8080/api/like/52 - delete the Like belong to Reply ID 52 belong to the given user
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function unlike(Replies $reply)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Likes  $likes
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Likes $likes)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Likes  $likes
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Likes $likes)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Likes  $likes
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Likes $likes)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\Likes  $likes
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Likes $likes)
-    {
-        //
+        //Since a user can only like reply once, we get the First like that is equal to the logged in user and then delete it
+        $reply->likes()->where('user_id', '1')->first()->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
+        //$reply->likes()->where('user_id', auth()->id())->first()->delete();
     }
 }
