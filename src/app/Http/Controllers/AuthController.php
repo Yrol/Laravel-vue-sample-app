@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -18,11 +21,11 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        //this is the out of the box middleware for JWT authentication, it applies for all the API endpoints below except for "login"
-        //$this->middleware('auth:api', ['except' => ['login']]);
+        //this is the out of the box middleware for JWT authentication, it applies for all the API endpoints below except for "login".
+        //$this->middleware('auth:api', ['except' => ['login', 'signup']]);
 
-        //defining our own middleware as opposed to the defualt one defined above
-        $this->middleware('jwt', ['except' => ['login']]);
+        //Defining our own middleware as opposed to the default one defined above. In this middleware we can handle exceptions & etc as we need.
+        $this->middleware('jwt', ['except' => ['login', 'signup']]);
     }
 
     /**
@@ -39,6 +42,16 @@ class AuthController extends Controller
         }
 
         return $this->respondWithToken($token);
+    }
+
+    /**
+     * Signup function to add a new users and also to log them in automatically with a valid token
+     */
+    public function signup(Request $request){
+        $user = $request->all();
+        //$user['password'] = bcrypt($user['password']); //encrypting the password using bcrypt. We can also perform this inside the User class using a special function called "setPasswordAttribute"
+        User::create($user);//adding the new user
+        return $this->login($request); // login the user using original request
     }
 
     /**

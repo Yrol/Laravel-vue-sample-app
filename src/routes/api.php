@@ -33,6 +33,7 @@ Route::group([
     Route::post('me', 'AuthController@me');
     Route::post('payload', 'AuthController@payload' ); //payload will give information/metadata about the token: Eg: expiry time, issue end point(/login, /refresh & etc) & etc
     Route::post('getAuthenticatedUser', 'AuthController@getAuthenticatedUser');
+    Route::post('signup', 'AuthController@signup');//signup new user
 
 });
 

@@ -78,4 +78,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    //Encrypting the password when adding a new user to the DB. Hence we don't have to explicitly define it
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }
