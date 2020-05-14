@@ -8,6 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LikesController extends Controller
 {
+
+    public function __construct()
+    {
+        //Middleware that validate tokens. Only the logged in users are allowed to like and unlike
+        $this->middleware('jwt');
+    }
+
     /**
      * Adding a like to a reply
      * API Route: "api/like/{reply_id}"

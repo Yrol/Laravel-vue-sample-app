@@ -10,6 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class QuestionsController extends Controller
 {
+    public function __construct()
+    {
+        //Middleware that validate tokens. Except "index" and "show" means non-logged in users can only view all or single question. Not allowed to create, delete or update
+        $this->middleware('jwt', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,16 +28,6 @@ class QuestionsController extends Controller
 
         //Using the "QuestionResource" API Resource wrapper to expose only the specified data
         return QuestionResource::collection(Questions::latest()->get());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -91,18 +87,6 @@ class QuestionsController extends Controller
     //     $question = Questions::where('slug', $slug)->firstOrFail();
     //     return response()->json($question);
     // }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Questions  $questions
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Questions $questions)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

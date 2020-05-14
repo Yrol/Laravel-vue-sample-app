@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RepliesController extends Controller
 {
+    public function __construct()
+    {
+        //Middleware that validate tokens. Except "index" and "show" means non-logged in users can only view all or single reply. Not allowed to create, delete or update.
+        $this->middleware('jwt', ['except' => ['index', 'show']]);
+    }
     /**
      * Displaying all Replies belongs to a specific Question
      * API Route: "api/question/{question}/reply"
@@ -18,16 +23,6 @@ class RepliesController extends Controller
     {
         //this relationship is defined in the Questions model in the "replies" method where "hasMany(Replies::class);"
         return $question->replies;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -52,17 +47,6 @@ class RepliesController extends Controller
     public function show(Questions $question, Replies $reply)
     {
         return $reply;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Replies  $replies
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Replies $replies)
-    {
-        //
     }
 
     /**

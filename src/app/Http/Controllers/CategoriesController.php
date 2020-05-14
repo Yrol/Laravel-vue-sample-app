@@ -9,6 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CategoriesController extends Controller
 {
+
+    public function __construct()
+    {
+        //Middleware that validate tokens. Except "index" and "show" means non-logged in users can only view all or single category. Not allowed to create, delete or update.
+        $this->middleware('jwt', ['except' => ['index', 'show']]);
+    }
+
+
     /**
      * Get all Categories.
      *
@@ -17,16 +25,6 @@ class CategoriesController extends Controller
     public function index()
     {
         return CategoryResource::collection(Categories::latest()->get());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -57,17 +55,6 @@ class CategoriesController extends Controller
     public function show(Categories $category)
     {
         return new CategoryResource($category);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Categories  $categories
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Categories $categories)
-    {
-        //
     }
 
     /**
