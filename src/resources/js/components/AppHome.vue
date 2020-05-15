@@ -1,13 +1,11 @@
 <template>
- <h1>Home</h1>
+<toolbar></toolbar>
 </template>
 
 <script>
+import toolbar from "./Toolbar"
 export default {
-    //lifecycle method to execute when the component is mounted
-    mounted() {
-        console.log('Component mounted.')
-    }
+    components:{toolbar}
 }
 </script>
 
