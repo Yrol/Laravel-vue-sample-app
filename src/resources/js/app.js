@@ -5,6 +5,7 @@
  */
 
 import Vuetify from 'vuetify';
+import router from './router/Router.js';
 
 //require('./bootstrap');
 
@@ -38,4 +39,5 @@ Vue.component('AppHome', require('./components/AppHome.vue').default);
 const app = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
+    router // adding the routes handler file
 });
