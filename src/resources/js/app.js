@@ -4,13 +4,13 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import Vuetify from 'vuetify';
-import router from './router/Router.js';
+import Vuetify from 'vuetify'
+import router from './router/Router.js'
 
 //require('./bootstrap');
 
-window.Vue = require('vue');
-Vue.use(Vuetify);
+window.Vue = require('vue')
+Vue.use(Vuetify)
 
 /**
  * The following block of code may be used to automatically register your
@@ -24,7 +24,7 @@ Vue.use(Vuetify);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 //Adding the component  "AppHome" in "/resources/js/components/AppHome.vue"
-Vue.component('AppHome', require('./components/AppHome.vue').default);
+Vue.component('AppHome', require('./components/AppHome.vue').default)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
