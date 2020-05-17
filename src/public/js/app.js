@@ -62490,6 +62490,70 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/helpers/AppStorage.js":
+/*!********************************************!*\
+  !*** ./resources/js/helpers/AppStorage.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var AppStorage = /*#__PURE__*/function () {
+  function AppStorage() {
+    _classCallCheck(this, AppStorage);
+  }
+
+  _createClass(AppStorage, [{
+    key: "store",
+    //calling the below storeToken and storeUser functions
+    value: function store(user, token) {
+      this.storeToken(token);
+      this.storeUser(user);
+    } //store token in the local storage
+
+  }, {
+    key: "storeToken",
+    value: function storeToken(token) {
+      localStorage.setItem('token', token);
+    } //store user in the local storage
+
+  }, {
+    key: "storeUser",
+    value: function storeUser(user) {
+      localStorage.setItem('user', user);
+    }
+  }, {
+    key: "getToken",
+    value: function getToken() {
+      return localStorage.getItem('token');
+    }
+  }, {
+    key: "getUser",
+    value: function getUser() {
+      return localStorage.getItem('user');
+    } //clear tokens and user information from the local storage
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      localStorage.clear();
+    }
+  }]);
+
+  return AppStorage;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (AppStorage = new AppStorage());
+
+/***/ }),
+
 /***/ "./resources/js/helpers/Token.js":
 /*!***************************************!*\
   !*** ./resources/js/helpers/Token.js ***!
@@ -62513,10 +62577,11 @@ var Token = /*#__PURE__*/function () {
   _createClass(Token, [{
     key: "isValid",
     value: function isValid(token) {
-      var payload = this.payload(token); //checking the "iss" (issued server) in the payload to make sure its issued from our server
+      var payload = this.payload(token);
+      console.log(payload); //checking the "iss" (issued server) in the payload to make sure its issued from our server
 
       if (payload) {
-        payload.iss == "http://localhost:8080/api/auth/login" ? true : false;
+        return payload.iss == "http://localhost:8080/api/auth/login" ? true : false;
       }
 
       return false;
@@ -62556,11 +62621,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Token__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Token */ "./resources/js/helpers/Token.js");
+/* harmony import */ var _AppStorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AppStorage */ "./resources/js/helpers/AppStorage.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -62573,14 +62640,27 @@ var User = /*#__PURE__*/function () {
   _createClass(User, [{
     key: "login",
     value: function login(data) {
+      var _this = this;
+
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/auth/login', {
         email: data.email,
         password: data.password
       }).then(function (res) {
-        _Token__WEBPACK_IMPORTED_MODULE_1__["default"].payload(res.data.access_token);
+        var access_token = res.data.access_token;
+        var user = res.data.user;
+
+        _this.responseAfterLogin(user, access_token);
       })["catch"](function (error) {
         return console.log(error.response.data);
       });
+    }
+  }, {
+    key: "responseAfterLogin",
+    value: function responseAfterLogin(user, token) {
+      if (_Token__WEBPACK_IMPORTED_MODULE_1__["default"].isValid(token)) {
+        console.log(token);
+        _AppStorage__WEBPACK_IMPORTED_MODULE_2__["default"].store(user, token);
+      }
     }
   }]);
 

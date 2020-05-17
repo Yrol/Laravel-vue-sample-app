@@ -1,5 +1,11 @@
 class AppStorage {
 
+    //calling the below storeToken and storeUser functions
+    store(user, token) {
+        this.storeToken(token)
+        this.storeUser(user)
+    }
+
     //store token in the local storage
     storeToken(token){
         localStorage.setItem('token', token)
@@ -8,12 +14,6 @@ class AppStorage {
     //store user in the local storage
     storeUser(user){
         localStorage.setItem('user', user)
-    }
-
-    //calling the above storeToken and storeUser functions
-    store(user, token) {
-        this.storeToken(token)
-        this.storeUser(user)
     }
 
     getToken() {
