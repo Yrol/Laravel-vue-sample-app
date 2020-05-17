@@ -49,7 +49,7 @@ export default {
     return {
         email: "",
         password: "",
-        show: true,
+        show: false,
         passwordRules: {
             required: value => !!value || "Required.",
             min: v => v.length >= 8 || "Min 8 characters",
