@@ -1,10 +1,11 @@
 <template>
-  <form>
+  <form id="loginForm">
     <!-- Email -->
     <v-text-field
       v-model="email"
       :error-messages="emailErrors"
       label="E-mail"
+      name="email"
       required
       @input="$v.email.$touch()"
       @blur="$v.email.$touch()"
@@ -42,16 +43,19 @@ export default {
     email: { required, email }
   },
 
-  data: () => ({
-    email: "",
-    show: true,
-    password: "",
-    passwordRules: {
-      required: value => !!value || "Required.",
-      min: v => v.length >= 8 || "Min 8 characters",
-      emailMatch: () => "The email and password you entered don't match"
+
+  //values that'll be return on submission. Binding values
+  data () {
+    return {
+        email: "",
+        password: "",
+        show: true,
+        passwordRules: {
+            required: value => !!value || "Required.",
+            min: v => v.length >= 8 || "Min 8 characters",
+        }
     }
-  }),
+  },
 
   computed: {
     emailErrors() {
@@ -65,7 +69,9 @@ export default {
 
   methods: {
     submit() {
-      this.$v.$touch();
+      this.$v.$touch()
+      let data = {email: this.email, password: this.password}
+      User.login(data)
     },
     clear() {
       this.$v.$reset();

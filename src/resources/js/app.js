@@ -6,11 +6,15 @@
 
 import Vuetify from 'vuetify'
 import router from './router/Router.js'
+import User from './helpers/User'
 
 //require('./bootstrap');
 
 window.Vue = require('vue')
 Vue.use(Vuetify)
+
+window.User = User
+
 
 /**
  * The following block of code may be used to automatically register your
