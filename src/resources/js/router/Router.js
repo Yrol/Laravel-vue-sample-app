@@ -11,7 +11,7 @@ const routes = [
 
 const router = new VueRouter({
     routes,
-    //hashbang: false, // remove the has after domain: ex: http://localhost:8080/#/login
+    hashbang: false, // remove the has after domain: ex: http://localhost:8080/#/login
     mode: 'history'
 })
 

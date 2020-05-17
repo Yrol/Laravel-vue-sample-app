@@ -1,5 +1,5 @@
 <template>
-  <v-card color="grey lighten-4" flat height="1px" tile>
+  <v-card color="grey lighten-4" flat height="50px" tile>
     <v-toolbar dense>
       <v-toolbar-title>Title</v-toolbar-title>
 

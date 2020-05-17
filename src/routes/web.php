@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+// Route::get('/', function () {
+//     return view('home');
+// });
+
+//
+Route::view('/', 'home');
+Route::view('/{any}', 'home'); // if there is anything on the route (ex: localhost:8000/login) it will still return home, that way the URL will stay the same "/login" and Vue will catch {any} and render based on that
