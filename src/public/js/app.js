@@ -114,8 +114,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -1431,19 +1429,13 @@ var render = function() {
       _c("toolbar"),
       _vm._v(" "),
       _c(
-        "v-content",
+        "v-container",
+        { attrs: { fluid: "", "fill-height": "" } },
         [
           _c(
-            "v-container",
-            { attrs: { fluid: "", "fill-height": "" } },
-            [
-              _c(
-                "v-layout",
-                { attrs: { "justify-center": "", "align-center": "" } },
-                [_c("router-view")],
-                1
-              )
-            ],
+            "v-layout",
+            { attrs: { "justify-center": "", "align-center": "" } },
+            [_c("router-view")],
             1
           )
         ],

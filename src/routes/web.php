@@ -19,4 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 //
 Route::view('/', 'home');
-Route::view('/{any}', 'home'); // if there is anything on the route (ex: localhost:8000/login) it will still return home, that way the URL will stay the same "/login" and Vue will catch {any} and render based on that
+/**
+ * if there is anything on the route (ex: localhost:8000/login) it will always return the home route but will retain the {any} value in the URL, the Vue route will catch this {any} value and render.
+ * Without this in place, Laravel will throw 404 from its routes.
+ */
+Route::view('/{any}', 'home');
