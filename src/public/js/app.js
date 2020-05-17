@@ -62577,8 +62577,7 @@ var Token = /*#__PURE__*/function () {
   _createClass(Token, [{
     key: "isValid",
     value: function isValid(token) {
-      var payload = this.payload(token);
-      console.log(payload); //checking the "iss" (issued server) in the payload to make sure its issued from our server
+      var payload = this.payload(token); //checking the "iss" (issued server) in the payload to make sure its issued from our server
 
       if (payload) {
         return payload.iss == "http://localhost:8080/api/auth/login" ? true : false;
@@ -62660,6 +62659,37 @@ var User = /*#__PURE__*/function () {
       if (_Token__WEBPACK_IMPORTED_MODULE_1__["default"].isValid(token)) {
         console.log(token);
         _AppStorage__WEBPACK_IMPORTED_MODULE_2__["default"].store(user, token);
+      }
+    }
+  }, {
+    key: "hasToken",
+    value: function hasToken() {
+      var storedToken = _AppStorage__WEBPACK_IMPORTED_MODULE_2__["default"].getToken();
+
+      if (storedToken) {
+        return _Token__WEBPACK_IMPORTED_MODULE_1__["default"].isValid(storedToken) ? true : false;
+      }
+
+      return false;
+    }
+  }, {
+    key: "loggedIn",
+    value: function loggedIn() {
+      return this.hasToken();
+    } //logout the user
+
+  }, {
+    key: "logout",
+    value: function logout() {
+      _AppStorage__WEBPACK_IMPORTED_MODULE_2__["default"].clear();
+    } //getting the user ID. To the the token we must get the payload of the JWT first. Then access the "sub" entity of the payload which contains the ID
+
+  }, {
+    key: "getUserID",
+    value: function getUserID() {
+      if (this.loggedIn()) {
+        var payload = _Token__WEBPACK_IMPORTED_MODULE_1__["default"].payload(_AppStorage__WEBPACK_IMPORTED_MODULE_2__["default"].getToken());
+        return payload.sub;
       }
     }
   }]);

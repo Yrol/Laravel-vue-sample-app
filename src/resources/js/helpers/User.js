@@ -13,10 +13,35 @@ class User {
         .catch(error => console.log(error.response.data))
     }
 
-    responseAfterLogin(user, token){
-        if(Token.isValid(token)){
+    responseAfterLogin(user, token) {
+        if(Token.isValid(token)) {
             console.log(token)
             AppStorage.store(user, token)
+        }
+    }
+
+    hasToken() {
+        const storedToken = AppStorage.getToken();
+        if(storedToken) {
+            return Token.isValid(storedToken) ? true: false
+        }
+        return false
+    }
+
+    loggedIn() {
+        return this.hasToken()
+    }
+
+    //logout the user
+    logout() {
+        AppStorage.clear()
+    }
+
+    //getting the user ID. To the the token we must get the payload of the JWT first. Then access the "sub" entity of the payload which contains the ID
+    getUserID() {
+        if(this.loggedIn()) {
+            const payload = Token.payload(AppStorage.getToken())
+            return payload.sub
         }
     }
 }
