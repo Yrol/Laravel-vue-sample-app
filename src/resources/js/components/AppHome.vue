@@ -15,12 +15,13 @@
 </template>
 
 <script>
-import toolbar from "./Toolbar";
-import AppFooter from "./AppFooter";
-import Login from "./login/Login";
+import toolbar from "./Toolbar"
+import AppFooter from "./AppFooter"
+import Login from "./login/Login"
+import SignUp from "./signup/SignUp"
 
 export default {
-  components: { toolbar, AppFooter, Login }
+  components: { toolbar, AppFooter, Login, SignUp }
 };
 </script>
 

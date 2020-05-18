@@ -29,7 +29,6 @@
     <v-btn class="mr-4" @click="submit">submit</v-btn>
     <v-btn @click="clear">clear</v-btn>
   </form>
-
 </template>
 
 <script>
@@ -43,18 +42,17 @@ export default {
     email: { required, email }
   },
 
-
   //values that'll be return on submission. Binding values
-  data () {
+  data() {
     return {
-        email: "",
-        password: "",
-        show: false,
-        passwordRules: {
-            required: value => !!value || "Required.",
-            min: v => v.length >= 8 || "Min 8 characters",
-        }
-    }
+      email: "",
+      password: "",
+      show: false,
+      passwordRules: {
+        required: value => !!value || "Required.",
+        min: v => v.length >= 8 || "Min 8 characters"
+      }
+    };
   },
 
   computed: {
@@ -69,9 +67,9 @@ export default {
 
   methods: {
     submit() {
-      this.$v.$touch()
-      let data = {email: this.email, password: this.password}
-      User.login(data)
+      this.$v.$touch();
+      let data = { email: this.email, password: this.password };
+      User.login(data);
     },
     clear() {
       this.$v.$reset();
