@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SignupRequest;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -47,7 +48,7 @@ class AuthController extends Controller
     /**
      * Signup function to add a new users and also to log them in automatically with a valid token
      */
-    public function signup(Request $request){
+    public function signup(SignupRequest $request){
         $user = $request->all();
         //$user['password'] = bcrypt($user['password']); //encrypting the password using bcrypt. We can also perform this inside the User class using a special function called "setPasswordAttribute"
         User::create($user);//adding the new user

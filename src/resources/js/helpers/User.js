@@ -4,28 +4,30 @@ import AppStorage from './AppStorage'
 
 class User {
 
+
+
     login (data) {
         axios.post('/api/auth/login', data)
         .then(res => {
             const access_token = res.data.access_token
             const user = res.data.user
-            this.responseAfterLogin(user, access_token)
+            this.responseAfterLogin(user, access_token, '/login')
         })
         .catch(error => console.log(error.response.data))
     }
 
     signup (data) {
-        axios.post('/api/auth/signup', data)
-        .then(res => {
-            const access_token = res.data.access_token
-            const user = res.data.user
-            this.responseAfterLogin(user, access_token)
-        })
-        .catch(error => console.log(error.response.data))
+        return axios.post('/api/auth/signup', data)
+            .then(res => {
+                const access_token = res.data.access_token
+                const user = res.data.user
+                this.responseAfterLogin(user, access_token, '/signup')
+            })
+            .catch(error => { throw error});
     }
 
-    responseAfterLogin(user, token) {
-        if(Token.isValid(token)) {
+    responseAfterLogin(user, token, api) {
+        if(Token.isValid(token, api)) {
             console.log(token)
             AppStorage.store(user, token)
         }

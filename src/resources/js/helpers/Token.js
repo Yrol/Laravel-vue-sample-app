@@ -1,10 +1,11 @@
 class Token {
 
-    isValid(token) {
+    isValid(token, api) {
         const payload =  this.payload(token)
+        const baseUrl = "http://localhost:8080/api/auth"
         //checking the "iss" (issued server) in the payload to make sure its issued from our server
         if(payload){
-           return payload.iss == "http://localhost:8080/api/auth/login" ? true : false
+           return payload.iss == (baseUrl + api) ? true : false
         }
         return false
     }

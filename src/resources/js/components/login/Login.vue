@@ -1,21 +1,21 @@
 <template>
-  <form id="loginForm">
+  <v-form
+    ref="form"
+    v-model="valid"
+    lazy-validation>
     <!-- Email -->
     <v-text-field
       v-model="email"
-      :error-messages="emailErrors"
+      :rules="emailRules"
       label="E-mail"
-      name="email"
       required
-      @input="$v.email.$touch()"
-      @blur="$v.email.$touch()"
     ></v-text-field>
 
     <!-- Password -->
     <v-text-field
       v-model="password"
       :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[passwordRules.required, passwordRules.min]"
+      :rules="passwordRules"
       :type="show ? 'text' : 'password'"
       name="password"
       label="password"
@@ -26,9 +26,23 @@
       @click:append="show = !show"
     ></v-text-field>
 
-    <v-btn class="mr-4" @click="submit">submit</v-btn>
-    <v-btn @click="clear">clear</v-btn>
-  </form>
+    <v-btn
+        :disabled="!valid"
+        color="success"
+        class="mr-4"
+        @click="submit"
+        >
+        Sign up
+        </v-btn>
+
+        <v-btn
+        color="error"
+        class="mr-4"
+        @click="reset"
+        >
+        Reset Form
+    </v-btn>
+  </v-form>
 </template>
 
 <script>
@@ -36,46 +50,41 @@ import { validationMixin } from "vuelidate";
 import { required, maxLength, email } from "vuelidate/lib/validators";
 
 export default {
-  mixins: [validationMixin],
-
-  validations: {
-    email: { required, email }
-  },
 
   //values that'll be return on submission. Binding values
   data() {
     return {
-      email: "",
-      password: "",
+      valid : true,
+
+      //email
+      emailServerErrors: 'test error',
+      email: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
+
+      //password
       show: false,
-      passwordRules: {
-        required: value => !!value || "Required.",
-        min: v => v.length >= 8 || "Min 8 characters"
-      }
+      password: '',
+      passwordRules: [
+         value => !!value || "Required.",
+         v => (!v ||v && v.length >= 8) || 'Minimum length is 8 characters'
+      ]
     };
   },
 
-  computed: {
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Must be valid e-mail");
-      !this.$v.email.required && errors.push("E-mail is required");
-      return errors;
-    }
-  },
-
   methods: {
-    submit() {
-      this.$v.$touch();
-      let data = { email: this.email, password: this.password };
-      User.login(data);
-    },
-    clear() {
-      this.$v.$reset();
-      this.email = "";
-      this.password = "";
-    }
+      submit () {
+        const validateForrm = this.$refs.form.validate()
+        if(validateForrm) {
+            let data = { email: this.email, password: this.password }
+            User.login(data)
+        }
+      },
+      reset () {
+        this.$refs.form.reset()
+      },
   }
 };
 </script>

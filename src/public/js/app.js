@@ -2029,54 +2029,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [vuelidate__WEBPACK_IMPORTED_MODULE_0__["validationMixin"]],
-  validations: {
-    email: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-      email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["email"]
-    }
-  },
   //values that'll be return on submission. Binding values
   data: function data() {
     return {
-      email: "",
-      password: "",
+      valid: true,
+      //email
+      emailServerErrors: 'test error',
+      email: '',
+      emailRules: [function (v) {
+        return !!v || 'E-mail is required';
+      }, function (v) {
+        return /.+@.+\..+/.test(v) || 'E-mail must be valid';
+      }],
+      //password
       show: false,
-      passwordRules: {
-        required: function required(value) {
-          return !!value || "Required.";
-        },
-        min: function min(v) {
-          return v.length >= 8 || "Min 8 characters";
-        }
-      }
+      password: '',
+      passwordRules: [function (value) {
+        return !!value || "Required.";
+      }, function (v) {
+        return !v || v && v.length >= 8 || 'Minimum length is 8 characters';
+      }]
     };
-  },
-  computed: {
-    emailErrors: function emailErrors() {
-      var errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Must be valid e-mail");
-      !this.$v.email.required && errors.push("E-mail is required");
-      return errors;
-    }
   },
   methods: {
     submit: function submit() {
-      this.$v.$touch();
-      var data = {
-        email: this.email,
-        password: this.password
-      };
-      User.login(data);
+      var validateForrm = this.$refs.form.validate();
+
+      if (validateForrm) {
+        var data = {
+          email: this.email,
+          password: this.password
+        };
+        User.login(data);
+      }
     },
-    clear: function clear() {
-      this.$v.$reset();
-      this.email = "";
-      this.password = "";
+    reset: function reset() {
+      this.$refs.form.reset();
     }
   }
 });
@@ -2156,48 +2161,89 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: true,
       //name
-      name: '',
+      name: {
+        value: '',
+        error: ''
+      },
       nameRules: [function (v) {
         return !!v || 'Name is required';
       }, function (v) {
         return v && v.length <= 10 || 'Name must be less than 10 characters';
       }],
       //email
-      email: '',
+      email: {
+        value: '',
+        error: ''
+      },
       emailRules: [function (v) {
         return !!v || 'E-mail is required';
       }, function (v) {
         return /.+@.+\..+/.test(v) || 'E-mail must be valid';
       }],
       //password
-      show: false,
-      password: '',
-      passwordRules: {
-        required: function required(value) {
-          return !!value || "Required.";
-        },
-        min: function min(v) {
-          return v.length >= 8 || "Min 8 characters";
-        }
-      }
+      showPass: false,
+      password: {
+        value: '',
+        error: ''
+      },
+      passwordRules: [function (value) {
+        return !!value || "Required.";
+      }, function (v) {
+        return !v || v && v.length >= 8 || 'Minimum length is 8 characters';
+      }],
+      //password confirmation
+      showPassConfirmation: false,
+      passwordConfirmation: {
+        value: '',
+        error: ''
+      },
+      passwordConfirmationRules: [function (v) {
+        return !!v || "Confirm password";
+      }]
     };
   },
   methods: {
     submit: function submit() {
+      var _this = this;
+
       var validateForrm = this.$refs.form.validate();
 
       if (validateForrm) {
         var data = {
-          name: this.name,
-          email: this.email,
-          password: this.password
+          name: this.name.value,
+          email: this.email.value,
+          password: this.password.value,
+          password_confirmation: this.passwordConfirmation.value
         };
-        User.signup(data);
+        User.signup(data).then(function () {
+          console.log('register successful we can redirect from this view');
+        })["catch"](function (error) {
+          //Injecting serverside validation errors to the form in-case
+          _this.name.error = error.response.data.errors.name, _this.email.error = error.response.data.errors.email, _this.password.error = error.response.data.errors.password;
+        });
       }
     },
     reset: function reset() {
@@ -2223,7 +2269,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .login-text { margin-bottom: 1000px;} */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .login-text { margin-bottom: 1000px;} */\n", ""]);
 
 // exports
 
@@ -3496,24 +3542,21 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "form",
-    { attrs: { id: "loginForm" } },
+    "v-form",
+    {
+      ref: "form",
+      attrs: { "lazy-validation": "" },
+      model: {
+        value: _vm.valid,
+        callback: function($$v) {
+          _vm.valid = $$v
+        },
+        expression: "valid"
+      }
+    },
     [
       _c("v-text-field", {
-        attrs: {
-          "error-messages": _vm.emailErrors,
-          label: "E-mail",
-          name: "email",
-          required: ""
-        },
-        on: {
-          input: function($event) {
-            return _vm.$v.email.$touch()
-          },
-          blur: function($event) {
-            return _vm.$v.email.$touch()
-          }
-        },
+        attrs: { rules: _vm.emailRules, label: "E-mail", required: "" },
         model: {
           value: _vm.email,
           callback: function($$v) {
@@ -3527,7 +3570,7 @@ var render = function() {
         staticClass: "input-group--focused",
         attrs: {
           "append-icon": _vm.show ? "mdi-eye" : "mdi-eye-off",
-          rules: [_vm.passwordRules.required, _vm.passwordRules.min],
+          rules: _vm.passwordRules,
           type: _vm.show ? "text" : "password",
           name: "password",
           label: "password",
@@ -3549,11 +3592,25 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("v-btn", { staticClass: "mr-4", on: { click: _vm.submit } }, [
-        _vm._v("submit")
-      ]),
+      _c(
+        "v-btn",
+        {
+          staticClass: "mr-4",
+          attrs: { disabled: !_vm.valid, color: "success" },
+          on: { click: _vm.submit }
+        },
+        [_vm._v("\n      Sign up\n      ")]
+      ),
       _vm._v(" "),
-      _c("v-btn", { on: { click: _vm.clear } }, [_vm._v("clear")])
+      _c(
+        "v-btn",
+        {
+          staticClass: "mr-4",
+          attrs: { color: "error" },
+          on: { click: _vm.reset }
+        },
+        [_vm._v("\n      Reset Form\n  ")]
+      )
     ],
     1
   )
@@ -3598,36 +3655,43 @@ var render = function() {
         attrs: {
           counter: 20,
           rules: _vm.nameRules,
+          "error-messages": _vm.name.error,
           label: "Name",
           required: ""
         },
         model: {
-          value: _vm.name,
+          value: _vm.name.value,
           callback: function($$v) {
-            _vm.name = $$v
+            _vm.$set(_vm.name, "value", $$v)
           },
-          expression: "name"
+          expression: "name.value"
         }
       }),
       _vm._v(" "),
       _c("v-text-field", {
-        attrs: { rules: _vm.emailRules, label: "E-mail", required: "" },
+        attrs: {
+          rules: _vm.emailRules,
+          "error-messages": _vm.email.error,
+          label: "E-mail",
+          required: ""
+        },
         model: {
-          value: _vm.email,
+          value: _vm.email.value,
           callback: function($$v) {
-            _vm.email = $$v
+            _vm.$set(_vm.email, "value", $$v)
           },
-          expression: "email"
+          expression: "email.value"
         }
       }),
       _vm._v(" "),
       _c("v-text-field", {
         staticClass: "input-group--focused",
         attrs: {
-          "append-icon": _vm.show ? "mdi-eye" : "mdi-eye-off",
-          rules: [_vm.passwordRules.required, _vm.passwordRules.min],
-          type: _vm.show ? "text" : "password",
+          "append-icon": _vm.showPass ? "mdi-eye" : "mdi-eye-off",
+          rules: _vm.passwordRules,
+          type: _vm.showPass ? "text" : "password",
           name: "password",
+          "error-messages": _vm.password.error,
           label: "password",
           required: "",
           hint: "At least 8 characters",
@@ -3635,15 +3699,41 @@ var render = function() {
         },
         on: {
           "click:append": function($event) {
-            _vm.show = !_vm.show
+            _vm.showPass = !_vm.showPass
           }
         },
         model: {
-          value: _vm.password,
+          value: _vm.password.value,
           callback: function($$v) {
-            _vm.password = $$v
+            _vm.$set(_vm.password, "value", $$v)
           },
-          expression: "password"
+          expression: "password.value"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-text-field", {
+        staticClass: "input-group--focused",
+        attrs: {
+          "append-icon": _vm.showPassConfirmation ? "mdi-eye" : "mdi-eye-off",
+          rules: _vm.passwordConfirmationRules,
+          type: _vm.showPassConfirmation ? "text" : "password",
+          name: "password_confirmation",
+          label: "password",
+          required: "",
+          hint: "At least 8 characters",
+          value: ""
+        },
+        on: {
+          "click:append": function($event) {
+            _vm.showPassConfirmation = !_vm.showPassConfirmation
+          }
+        },
+        model: {
+          value: _vm.passwordConfirmation.value,
+          callback: function($$v) {
+            _vm.$set(_vm.passwordConfirmation, "value", $$v)
+          },
+          expression: "passwordConfirmation.value"
         }
       }),
       _vm._v(" "),
@@ -3654,7 +3744,7 @@ var render = function() {
           attrs: { disabled: !_vm.valid, color: "success" },
           on: { click: _vm.submit }
         },
-        [_vm._v("\n    Submit\n  ")]
+        [_vm._v("\n    Sign up\n  ")]
       ),
       _vm._v(" "),
       _c(
@@ -62897,11 +62987,12 @@ var Token = /*#__PURE__*/function () {
 
   _createClass(Token, [{
     key: "isValid",
-    value: function isValid(token) {
-      var payload = this.payload(token); //checking the "iss" (issued server) in the payload to make sure its issued from our server
+    value: function isValid(token, api) {
+      var payload = this.payload(token);
+      var baseUrl = "http://localhost:8080/api/auth"; //checking the "iss" (issued server) in the payload to make sure its issued from our server
 
       if (payload) {
-        return payload.iss == "http://localhost:8080/api/auth/login" ? true : false;
+        return payload.iss == baseUrl + api ? true : false;
       }
 
       return false;
@@ -62966,7 +63057,7 @@ var User = /*#__PURE__*/function () {
         var access_token = res.data.access_token;
         var user = res.data.user;
 
-        _this.responseAfterLogin(user, access_token);
+        _this.responseAfterLogin(user, access_token, '/login');
       })["catch"](function (error) {
         return console.log(error.response.data);
       });
@@ -62976,19 +63067,19 @@ var User = /*#__PURE__*/function () {
     value: function signup(data) {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/auth/signup', data).then(function (res) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/auth/signup', data).then(function (res) {
         var access_token = res.data.access_token;
         var user = res.data.user;
 
-        _this2.responseAfterLogin(user, access_token);
+        _this2.responseAfterLogin(user, access_token, '/signup');
       })["catch"](function (error) {
-        return console.log(error.response.data);
+        throw error;
       });
     }
   }, {
     key: "responseAfterLogin",
-    value: function responseAfterLogin(user, token) {
-      if (_Token__WEBPACK_IMPORTED_MODULE_1__["default"].isValid(token)) {
+    value: function responseAfterLogin(user, token, api) {
+      if (_Token__WEBPACK_IMPORTED_MODULE_1__["default"].isValid(token, api)) {
         console.log(token);
         _AppStorage__WEBPACK_IMPORTED_MODULE_2__["default"].store(user, token);
       }

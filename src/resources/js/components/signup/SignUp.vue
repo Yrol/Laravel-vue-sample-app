@@ -6,34 +6,52 @@
   >
     <!-- Name -->
     <v-text-field
-      v-model="name"
+      v-model="name.value"
       :counter="20"
       :rules="nameRules"
+      :error-messages="name.error"
       label="Name"
       required
     ></v-text-field>
 
     <!-- Email -->
     <v-text-field
-      v-model="email"
+      v-model="email.value"
       :rules="emailRules"
+      :error-messages="email.error"
       label="E-mail"
       required
     ></v-text-field>
 
     <!-- Password -->
     <v-text-field
-      v-model="password"
-      :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[passwordRules.required, passwordRules.min]"
-      :type="show ? 'text' : 'password'"
+      v-model="password.value"
+      :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+      :rules="passwordRules"
+      :type="showPass ? 'text' : 'password'"
       name="password"
+      :error-messages="password.error"
       label="password"
       required
       hint="At least 8 characters"
       value
       class="input-group--focused"
-      @click:append="show = !show"
+      @click:append="showPass = !showPass"
+    ></v-text-field>
+
+    <!-- Password confirmation -->
+    <v-text-field
+      v-model="passwordConfirmation.value"
+      :append-icon="showPassConfirmation ? 'mdi-eye' : 'mdi-eye-off'"
+      :rules="passwordConfirmationRules"
+      :type="showPassConfirmation ? 'text' : 'password'"
+      name="password_confirmation"
+      label="password"
+      required
+      hint="At least 8 characters"
+      value
+      class="input-group--focused"
+      @click:append="showPassConfirmation = !showPassConfirmation"
     ></v-text-field>
 
     <v-btn
@@ -42,7 +60,7 @@
       class="mr-4"
       @click="submit"
     >
-      Submit
+      Sign up
     </v-btn>
 
     <v-btn
@@ -68,34 +86,61 @@
       valid: true,
 
       //name
-      name: '',
+      name: {
+          value: '',
+          error: ''
+      },
       nameRules: [
         v => !!v || 'Name is required',
         v => (v && v.length <= 10) || 'Name must be less than 10 characters',
       ],
 
       //email
-      email: '',
+      email: {
+          value: '',
+          error: ''
+      },
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
 
       //password
-      show: false,
-      password: '',
-      passwordRules: {
-        required: value => !!value || "Required.",
-        min: v => v.length >= 8 || "Min 8 characters"
-      }
+      showPass: false,
+      password: {
+          value: '',
+          error: ''
+      },
+      passwordRules: [
+         value => !!value || "Required.",
+         v => (!v ||v && v.length >= 8) || 'Minimum length is 8 characters'
+      ],
+
+      //password confirmation
+      showPassConfirmation: false,
+      passwordConfirmation: {
+          value: '',
+          error: ''
+      },
+      passwordConfirmationRules: [
+        v => !!v || "Confirm password"
+      ]
     }),
 
     methods: {
       submit () {
         const validateForrm = this.$refs.form.validate()
         if(validateForrm) {
-            let data = { name: this.name, email: this.email, password: this.password }
+            let data = { name: this.name.value, email: this.email.value, password: this.password.value,  password_confirmation: this.passwordConfirmation.value }
             User.signup(data)
+                .then(() => {
+                    console.log('register successful we can redirect from this view')
+                })
+                .catch(error => {//Injecting serverside validation errors to the form in-case
+                    this.name.error = error.response.data.errors.name,
+                    this.email.error = error.response.data.errors.email,
+                    this.password.error = error.response.data.errors.password
+            })
         }
       },
       reset () {
