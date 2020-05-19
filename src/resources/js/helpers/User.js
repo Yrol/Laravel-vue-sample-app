@@ -1,10 +1,9 @@
 import axios, {AxiosResponse} from 'axios';
 import Token from './Token'
 import AppStorage from './AppStorage'
+import router from '../router/Router'
 
 class User {
-
-
 
     login (data) {
         axios.post('/api/auth/login', data)
@@ -12,6 +11,7 @@ class User {
             const access_token = res.data.access_token
             const user = res.data.user
             this.responseAfterLogin(user, access_token, '/login')
+            router.push({ name: 'forum'})
         })
         .catch(error => console.log(error.response.data))
     }
@@ -22,6 +22,7 @@ class User {
                 const access_token = res.data.access_token
                 const user = res.data.user
                 this.responseAfterLogin(user, access_token, '/signup')
+                router.push({ name: 'forum'})
             })
             .catch(error => { throw error});
     }

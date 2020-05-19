@@ -8,6 +8,7 @@ import Vuetify from 'vuetify'
 import router from './router/Router.js'
 import User from './helpers/User'
 
+
 //require('./bootstrap');
 
 window.Vue = require('vue')
