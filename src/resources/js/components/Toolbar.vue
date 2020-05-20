@@ -7,7 +7,7 @@
 
       <div>
         <!-- "router-link" is the component that enables the user to navigate to a given link-->
-        <router-link to="/forum">
+        <!-- <router-link to="/forum">
             <v-btn text>Forum</v-btn>
         </router-link>
 
@@ -16,9 +16,14 @@
         </router-link>
         <router-link to="/login">
             <v-btn text>Login</v-btn>
-        </router-link>
-        <router-link to="/signup">
-            <v-btn text>Sign Up</v-btn>
+        </router-link> -->
+
+        <router-link
+        v-for="item in items"
+        :key="item.title"
+        :to="item.to"
+        v-if="item.show">
+            <v-btn text>{{ item.title }}</v-btn>
         </router-link>
       </div>
     </v-toolbar>
@@ -27,7 +32,20 @@
 
 <script>
 
+import User from '../helpers/User'
+
 export default {
+    data () {
+        return {
+            items: [
+                {title: 'Forum', to: '/forum', show:true},
+                {title: 'Ask Question', to: '/ask', show: User.loggedIn()}, // only show when the user is logged in
+                {title: 'Sign up', to: '/signup', show: !User.loggedIn()}, // only show when the user is logged in
+                {title: 'Login', to: '/login', show: !User.loggedIn()}, // only show when the user is NOT logged in
+                {title: 'Logout', to: '/logout', show: User.loggedIn()}, // only show when the user is logged in
+            ]
+        }
+    }
 }
 </script>
 

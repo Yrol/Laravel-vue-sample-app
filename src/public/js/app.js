@@ -1952,6 +1952,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _helpers_User__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/User */ "./resources/js/helpers/User.js");
 //
 //
 //
@@ -1979,7 +1980,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      items: [{
+        title: 'Forum',
+        to: '/forum',
+        show: true
+      }, {
+        title: 'Ask Question',
+        to: '/ask',
+        show: _helpers_User__WEBPACK_IMPORTED_MODULE_0__["default"].loggedIn()
+      }, // only show when the user is logged in
+      {
+        title: 'Sign up',
+        to: '/signup',
+        show: !_helpers_User__WEBPACK_IMPORTED_MODULE_0__["default"].loggedIn()
+      }, // only show when the user is logged in
+      {
+        title: 'Login',
+        to: '/login',
+        show: !_helpers_User__WEBPACK_IMPORTED_MODULE_0__["default"].loggedIn()
+      }, // only show when the user is NOT logged in
+      {
+        title: 'Logout',
+        to: '/logout',
+        show: _helpers_User__WEBPACK_IMPORTED_MODULE_0__["default"].loggedIn()
+      } // only show when the user is logged in
+      ]
+    };
+  }
+});
 
 /***/ }),
 
@@ -2011,8 +2048,10 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
 /* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _helpers_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../helpers/User */ "./resources/js/helpers/User.js");
+/* harmony import */ var _router_Router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../router/Router */ "./resources/js/router/Router.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__);
 //
 //
 //
@@ -2039,30 +2078,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  created: function created() {
+    if (_helpers_User__WEBPACK_IMPORTED_MODULE_1__["default"].loggedIn()) {
+      _router_Router__WEBPACK_IMPORTED_MODULE_2__["default"].push({
+        name: 'forum'
+      });
+    }
+  },
   //values that'll be return on submission. Binding values
   data: function data() {
     return {
@@ -2094,7 +2121,7 @@ __webpack_require__.r(__webpack_exports__);
           email: this.email,
           password: this.password
         };
-        User.login(data);
+        _helpers_User__WEBPACK_IMPORTED_MODULE_1__["default"].login(data);
       }
     },
     reset: function reset() {
@@ -2286,7 +2313,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .login-text { margin-bottom: 1000px;} */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .login-text { margin-bottom: 1000px;} */\n", ""]);
 
 // exports
 
@@ -3496,37 +3523,20 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            [
-              _c(
-                "router-link",
-                { attrs: { to: "/forum" } },
-                [_c("v-btn", { attrs: { text: "" } }, [_vm._v("Forum")])],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "router-link",
-                { attrs: { to: "/ask-question" } },
-                [
-                  _c("v-btn", { attrs: { text: "" } }, [_vm._v("Ask Question")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "router-link",
-                { attrs: { to: "/login" } },
-                [_c("v-btn", { attrs: { text: "" } }, [_vm._v("Login")])],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "router-link",
-                { attrs: { to: "/signup" } },
-                [_c("v-btn", { attrs: { text: "" } }, [_vm._v("Sign Up")])],
-                1
-              )
-            ],
+            _vm._l(_vm.items, function(item) {
+              return item.show
+                ? _c(
+                    "router-link",
+                    { key: item.title, attrs: { to: item.to } },
+                    [
+                      _c("v-btn", { attrs: { text: "" } }, [
+                        _vm._v(_vm._s(item.title))
+                      ])
+                    ],
+                    1
+                  )
+                : _vm._e()
+            }),
             1
           )
         ],
@@ -3640,7 +3650,7 @@ var render = function() {
           attrs: { disabled: !_vm.valid, color: "success" },
           on: { click: _vm.submit }
         },
-        [_vm._v("\n      Sign up\n      ")]
+        [_vm._v("Sign up")]
       ),
       _vm._v(" "),
       _c(
@@ -3650,7 +3660,7 @@ var render = function() {
           attrs: { color: "error" },
           on: { click: _vm.reset }
         },
-        [_vm._v("\n      Reset Form\n  ")]
+        [_vm._v("Reset Form")]
       )
     ],
     1
@@ -63097,12 +63107,11 @@ var Token = /*#__PURE__*/function () {
 
   _createClass(Token, [{
     key: "isValid",
-    value: function isValid(token, api) {
-      var payload = this.payload(token);
-      var baseUrl = "http://localhost:8080/api/auth"; //checking the "iss" (issued server) in the payload to make sure its issued from our server
+    value: function isValid(token) {
+      var payload = this.payload(token); //checking the "iss" (issued server) in the payload to make sure its issued from our server
 
       if (payload) {
-        return payload.iss == baseUrl + api ? true : false;
+        return payload.iss == "http://localhost:8080/api/auth/login" || payload.iss == "http://localhost:8080/api/auth/signup" ? true : false;
       }
 
       return false;
@@ -63169,7 +63178,7 @@ var User = /*#__PURE__*/function () {
         var access_token = res.data.access_token;
         var user = res.data.user;
 
-        _this.responseAfterLogin(user, access_token, '/login');
+        _this.responseAfterLogin(user, access_token);
 
         _router_Router__WEBPACK_IMPORTED_MODULE_3__["default"].push({
           name: 'forum'
@@ -63187,7 +63196,7 @@ var User = /*#__PURE__*/function () {
         var access_token = res.data.access_token;
         var user = res.data.user;
 
-        _this2.responseAfterLogin(user, access_token, '/signup');
+        _this2.responseAfterLogin(user, access_token);
 
         _router_Router__WEBPACK_IMPORTED_MODULE_3__["default"].push({
           name: 'forum'
@@ -63198,8 +63207,8 @@ var User = /*#__PURE__*/function () {
     }
   }, {
     key: "responseAfterLogin",
-    value: function responseAfterLogin(user, token, api) {
-      if (_Token__WEBPACK_IMPORTED_MODULE_1__["default"].isValid(token, api)) {
+    value: function responseAfterLogin(user, token) {
+      if (_Token__WEBPACK_IMPORTED_MODULE_1__["default"].isValid(token)) {
         console.log(token);
         _AppStorage__WEBPACK_IMPORTED_MODULE_2__["default"].store(user, token);
       }

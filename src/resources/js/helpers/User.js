@@ -10,7 +10,7 @@ class User {
         .then(res => {
             const access_token = res.data.access_token
             const user = res.data.user
-            this.responseAfterLogin(user, access_token, '/login')
+            this.responseAfterLogin(user, access_token)
             router.push({ name: 'forum'})
         })
         .catch(error => console.log(error.response.data))
@@ -21,14 +21,14 @@ class User {
             .then(res => {
                 const access_token = res.data.access_token
                 const user = res.data.user
-                this.responseAfterLogin(user, access_token, '/signup')
+                this.responseAfterLogin(user, access_token)
                 router.push({ name: 'forum'})
             })
             .catch(error => { throw error});
     }
 
-    responseAfterLogin(user, token, api) {
-        if(Token.isValid(token, api)) {
+    responseAfterLogin(user, token) {
+        if(Token.isValid(token)) {
             console.log(token)
             AppStorage.store(user, token)
         }

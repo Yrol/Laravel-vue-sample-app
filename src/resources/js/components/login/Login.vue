@@ -1,15 +1,7 @@
 <template>
-  <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation>
+  <v-form ref="form" v-model="valid" lazy-validation>
     <!-- Email -->
-    <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      required
-    ></v-text-field>
+    <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
 
     <!-- Password -->
     <v-text-field
@@ -26,30 +18,25 @@
       @click:append="show = !show"
     ></v-text-field>
 
-    <v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4"
-        @click="submit"
-        >
-        Sign up
-        </v-btn>
+    <v-btn :disabled="!valid" color="success" class="mr-4" @click="submit">Sign up</v-btn>
 
-        <v-btn
-        color="error"
-        class="mr-4"
-        @click="reset"
-        >
-        Reset Form
-    </v-btn>
+    <v-btn color="error" class="mr-4" @click="reset">Reset Form</v-btn>
   </v-form>
 </template>
 
 <script>
 import { validationMixin } from "vuelidate";
+import User from "../../helpers/User"
+import router from "../../router/Router"
 import { required, maxLength, email } from "vuelidate/lib/validators";
 
 export default {
+
+    created() {
+        if(User.loggedIn()){
+            router.push({ name: 'forum'})
+        }
+    },
 
   //values that'll be return on submission. Binding values
   data() {
