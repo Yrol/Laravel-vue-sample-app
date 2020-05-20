@@ -18,6 +18,7 @@
             <v-btn text>Login</v-btn>
         </router-link> -->
 
+
         <router-link
         v-for="item in items"
         :key="item.title"
@@ -35,6 +36,12 @@
 import User from '../helpers/User'
 
 export default {
+    created() {
+        EventBus.$on('logout', () => {
+            User.logout()
+        });
+    },
+
     data () {
         return {
             items: [

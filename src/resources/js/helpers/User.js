@@ -11,7 +11,7 @@ class User {
             const access_token = res.data.access_token
             const user = res.data.user
             this.responseAfterLogin(user, access_token)
-            router.push({ name: 'forum'})
+            //router.push({ name: 'forum'})
         })
         .catch(error => console.log(error.response.data))
     }
@@ -22,7 +22,7 @@ class User {
                 const access_token = res.data.access_token
                 const user = res.data.user
                 this.responseAfterLogin(user, access_token)
-                router.push({ name: 'forum'})
+                //router.push({ name: 'forum'})
             })
             .catch(error => { throw error});
     }
@@ -31,6 +31,7 @@ class User {
         if(Token.isValid(token)) {
             console.log(token)
             AppStorage.store(user, token)
+            window.location = '/forum'
         }
     }
 
@@ -49,6 +50,7 @@ class User {
     //logout the user
     logout() {
         AppStorage.clear()
+        window.location = '/forum'
     }
 
     //getting the user ID. To the the token we must get the payload of the JWT first. Then access the "sub" entity of the payload which contains the ID

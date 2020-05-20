@@ -16,6 +16,9 @@ Vue.use(Vuetify)
 
 window.User = User
 
+//"EventBus" is the custom event that we'll be using to emit the logout event and listen to it in the Toolbar.vue
+window.EventBus = new Vue()
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -40,6 +43,7 @@ Vue.component('AppHome', require('./components/AppHome.vue').default)
 // const app = new Vue({
 //     el: '#app',
 // });
+
 
 const app = new Vue({
     el: '#app',
