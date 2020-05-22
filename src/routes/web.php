@@ -24,3 +24,4 @@ Route::view('/', 'home');
  * Without this in place, Laravel will throw 404 from its routes.
  */
 Route::view('/{any}', 'home');
+Route::view('/question/{any}', 'home');//route for viewing a single question

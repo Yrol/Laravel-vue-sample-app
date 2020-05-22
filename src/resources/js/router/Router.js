@@ -4,6 +4,7 @@ import Login from '../components/auth/Login'
 import Logout from '../components/auth/Logout'
 import SignUp from '../components/signup/SignUp'
 import Forum from '../components/forum/Forum'
+import ReadQuestion from '../components/forum/ReadQuestion'
 
 Vue.use(VueRouter)
 
@@ -12,7 +13,8 @@ const routes = [
     { path:  '/login', component: Login },
     { path: '/logout', component: Logout },
     { path:  '/signup', component: SignUp },
-    { path: '/forum', component: Forum, name: 'forum' }
+    { path: '/forum', component: Forum, name: 'forum' },
+    { path: '/question/:slug', component: ReadQuestion, name: 'readquestion' } //Route for reading a single question by using the slug. Ex: http://localhost:8080/api/question/this-is-the-test-title
 ]
 
 const router = new VueRouter({

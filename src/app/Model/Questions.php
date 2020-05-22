@@ -56,6 +56,6 @@ class Questions extends Model
     public function getPathAttribute()
     {
         //return asset("api/questions/$this->slug"); //asset will return the  domain with the slug: Ex: http://localhost:8080/api/questions/this-is-the-test-title
-        return "api/questions/$this->slug";
+        return "/question/$this->slug";
     }
 }
