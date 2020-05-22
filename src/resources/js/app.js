@@ -7,16 +7,18 @@
 import Vuetify from 'vuetify'
 import router from './router/Router.js'
 import User from './helpers/User'
-
+//import question from './components/forum/Question'
 
 //require('./bootstrap');
 
 window.Vue = require('vue')
 Vue.use(Vuetify)
 
+//adding the "User" object globally within the application
 window.User = User
 
 //"EventBus" is the custom event that we'll be using to emit the logout event and listen to it in the Toolbar.vue
+// Ideally we should use VueX rather than this.
 window.EventBus = new Vue()
 
 
@@ -31,8 +33,11 @@ window.EventBus = new Vue()
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-//Adding the component  "AppHome" in "/resources/js/components/AppHome.vue"
+//Registering the component globally  "AppHome" in "/resources/js/components/AppHome.vue" - this is the entry point (default) of the application ()
 Vue.component('AppHome', require('./components/AppHome.vue').default)
+
+//registering the question component globally
+//Vue.component('question-component', question);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
