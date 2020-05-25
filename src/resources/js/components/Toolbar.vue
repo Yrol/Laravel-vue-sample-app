@@ -6,19 +6,10 @@
       <v-spacer></v-spacer>
 
       <div>
-        <!-- "router-link" is the component that enables the user to navigate to a given link-->
-        <!-- <router-link to="/forum">
-            <v-btn text>Forum</v-btn>
-        </router-link>
 
-        <router-link to="/ask-question">
-            <v-btn text>Ask Question</v-btn>
-        </router-link>
-        <router-link to="/login">
-            <v-btn text>Login</v-btn>
-        </router-link> -->
-
-
+        <!-- "router-link" is the component that enables the user to navigate to a given link. -->
+        <!-- Relationship for mapping has been created in "router.js" and the "to" path in each item of the array ("items") as shown below. This way when user click on an item will be taken to the correct page -->
+        <!-- Links will be generated using the "items" array defined in "data" -->
         <router-link
         v-for="item in items"
         :key="item.title"

@@ -1,3 +1,4 @@
+<!-- Template to display a questiona as an item (card) in list of questions page-->
 <template>
   <v-card>
     <v-card-text>
