@@ -8,6 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Questions extends Model
 {
+    //Using Laravel's Bootable Eloquent Traits :https://andy-carter.com/blog/using-laravel-s-eloquent-traits
+    protected static function boot()
+    {
+        parent::boot(); // returning the existing functionality of this Model
+
+        //Adding the additional functionality (create a slug using the title) whenever this model gets created (during HTTP requests when creating a question & etc)
+        static::creating(function($question){
+            $question->slug = str_slug($question->title);
+        });
+    }
+
     /**
      * Get the route key for the model.
      * Using the column "slug" value instead of the ID to retrieve values. ex: http://localhost:8080/api/questions/reprehenderit-consequuntur-consequatur-nihil
