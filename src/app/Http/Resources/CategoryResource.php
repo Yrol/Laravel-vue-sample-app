@@ -16,6 +16,7 @@ class CategoryResource extends JsonResource
     {
         //return parent::toArray($request);
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
             'path' => $this->path,  //path will be returned from the Laravel's "getPathAttribute" function which we've overridden in the "Questions" model

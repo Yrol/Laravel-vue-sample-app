@@ -21,7 +21,11 @@ try {
 
 window.axios = require('axios');
 
+const user_token =  `Bearer ${localStorage.getItem('token')}`; //getting the token that is saved in local storage to pass in th header
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['Authorization'] = user_token;
+
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

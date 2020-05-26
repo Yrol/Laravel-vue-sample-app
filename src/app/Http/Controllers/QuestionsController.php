@@ -50,7 +50,9 @@ class QuestionsController extends Controller
 
         //Method 2 - one liner, this will save everything that will come in the request
         //when we use this method, we must make sure the "$fillable" variable is specified with mandatory fields in the relevant controller (in this case "/app/Http/Controllers/QuestionsController.php")
-        Questions::create($request->all());
+        $request['slug'] = str_slug($request->title);//adding the slug value to manually using the title and in-build laravel "str_slug"
+        //Questions::create($request->all());
+        auth()->user()->questions()->create($request->all());//Using the "auth" based on the relationship defined in "User.php" - return $this->hasMany(Questions::class);
         return response('Created', Response::HTTP_CREATED);//on completion return success (HTTP_CREATED - 201)
     }
 

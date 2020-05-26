@@ -7,9 +7,10 @@
 import Vuetify from 'vuetify'
 import router from './router/Router.js'
 import User from './helpers/User'
+import VueSimplemde from 'vue-simplemde'
 //import question from './components/forum/Question'
 
-//require('./bootstrap');
+require('./bootstrap');
 
 window.Vue = require('vue')
 Vue.use(Vuetify)
@@ -38,6 +39,9 @@ Vue.component('AppHome', require('./components/AppHome.vue').default)
 
 //registering the question component globally
 //Vue.component('question-component', question);
+
+//Registering the VueSimplemde globally
+Vue.component('vue-simplemde', VueSimplemde)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

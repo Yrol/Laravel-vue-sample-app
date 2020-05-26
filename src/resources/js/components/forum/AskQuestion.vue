@@ -1,7 +1,7 @@
 <!-- View for Creating  a new question -->
 <template>
 <div>
-     <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="form" v-model="valid" lazy-validation>
     <v-combobox
         v-model="category"
         :items="categoryItems"
@@ -12,7 +12,7 @@
     <v-divider></v-divider>
     <v-text-field v-model="title" :rules="titleRules" label="Title" required></v-text-field>
     <v-divider></v-divider>
-    <v-textarea
+    <!-- <v-textarea
       v-model="question"
       label="Question"
       counter
@@ -20,7 +20,8 @@
       full-width
       single-line
       :rules="questionRules"
-    ></v-textarea>
+    ></v-textarea> -->
+    <vue-simplemde v-model="question" ref="markdownEditor" />
     <v-btn :disabled="!valid" color="success" class="mr-4" @click="submit">Create</v-btn>
     <v-btn color="error" class="mr-4" @click="reset">Reset</v-btn>
   </v-form>
@@ -55,7 +56,11 @@ export default {
       categoryRules: [
           value => !!value || "Required.",
       ],
-      categoryItems: []
+      categoryItems: [],
+
+
+      //object that holds the errors which can be used for outputting errors when required
+      errors:{}
     };
   },
 
@@ -69,8 +74,10 @@ export default {
     submit() {
         const validateForrm = this.$refs.form.validate()
         if(validateForrm) {
-            let data = { category: this.category, title: this.title, question: this.question }
-            console.log(data)
+            let formData = { category_id: this.category.value, title: this.title, body: this.question }
+            axios.post('/api/questions', formData)
+            .then(res => console.log(res.data.data))
+            .catch(error => this.errors = error.response.data.error)
         }
     },
 
@@ -81,10 +88,10 @@ export default {
     //process and adding the categories into the categories array
     processCategories(catData) {
         for (let [key, value] of Object.entries(catData)) {
-            this.categoryItems.push(value.name)
+            var itemObj = { text: value.name, value: value.id }
+            this.categoryItems.push(itemObj)
         }
     }
-
   }
 };
 </script>
