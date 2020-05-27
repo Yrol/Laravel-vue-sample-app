@@ -2251,8 +2251,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           body: this.question
         };
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/api/questions', formData).then(function (res) {
-          return console.log(res.data.data);
-        })["catch"](function (error) {
+          return _this2.$router.push(res.data.path);
+        }) // redirecting the user to the newly created question page
+        ["catch"](function (error) {
           return _this2.errors = error.response.data.error;
         });
       }
@@ -2417,7 +2418,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      question: {}
+      question: null
     };
   },
   created: function created() {
@@ -2427,6 +2428,11 @@ __webpack_require__.r(__webpack_exports__);
     .then(function (res) {
       return _this.question = res.data.data;
     });
+  },
+  computed: {
+    question_body: function question_body() {
+      return md.parse(this.question.body);
+    }
   }
 });
 
@@ -57312,53 +57318,54 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "v-card",
-    [
-      _c(
-        "v-card-text",
+  return _vm.question
+    ? _c(
+        "v-card",
         [
           _c(
-            "v-layout",
-            { attrs: { "align-center": "" } },
+            "v-card-text",
             [
-              _c("v-flex", { attrs: { xs7: "" } }, [
-                _c("div", [_c("h2", [_vm._v(_vm._s(_vm.question.title))])])
-              ])
+              _c(
+                "v-layout",
+                { attrs: { "align-center": "" } },
+                [
+                  _c("v-flex", { attrs: { xs7: "" } }, [
+                    _c("div", [_c("h2", [_vm._v(_vm._s(_vm.question.title))])])
+                  ])
+                ],
+                1
+              )
             ],
             1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-card-text",
-        [
+          ),
+          _vm._v(" "),
           _c(
-            "v-layout",
-            { attrs: { "align-center": "" } },
+            "v-card-text",
             [
-              _c("v-flex", { attrs: { "mx-3": "" } }, [
-                _c("p", { staticClass: "text-xs-left" }, [
-                  _vm._v(
-                    "\n          " + _vm._s(_vm.question.body) + "\n        "
-                  )
-                ])
-              ])
+              _c(
+                "v-layout",
+                { attrs: { "align-center": "" } },
+                [
+                  _c("v-flex", { attrs: { "mx-3": "" } }, [
+                    _c("p", {
+                      staticClass: "text-xs-left",
+                      domProps: { innerHTML: _vm._s(_vm.question_body) }
+                    })
+                  ])
+                ],
+                1
+              )
             ],
             1
-          )
+          ),
+          _vm._v(" "),
+          _c("v-card-title", { attrs: { "primary-title": "" } }, [
+            _c("div", [_c("h6", [_vm._v(_vm._s(_vm.question.date_readable))])])
+          ])
         ],
         1
-      ),
-      _vm._v(" "),
-      _c("v-card-title", { attrs: { "primary-title": "" } }, [
-        _c("div", [_c("h6", [_vm._v(_vm._s(_vm.question.date_readable))])])
-      ])
-    ],
-    1
-  )
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -116474,6 +116481,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _router_Router_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router/Router.js */ "./resources/js/router/Router.js");
 /* harmony import */ var _helpers_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers/User */ "./resources/js/helpers/User.js");
 /* harmony import */ var vue_simplemde__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-simplemde */ "./node_modules/vue-simplemde/src/index.vue");
+/* harmony import */ var marked__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! marked */ "./node_modules/marked/lib/marked.js");
+/* harmony import */ var marked__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(marked__WEBPACK_IMPORTED_MODULE_4__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -116482,12 +116491,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
  //import question from './components/forum/Question'
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-Vue.use(vuetify__WEBPACK_IMPORTED_MODULE_0___default.a); //adding the "User" object globally within the application
+Vue.use(vuetify__WEBPACK_IMPORTED_MODULE_0___default.a); //making the markdown editor global
+
+window.md = marked__WEBPACK_IMPORTED_MODULE_4___default.a; //adding the "User" object globally within the application
 
 window.User = _helpers_User__WEBPACK_IMPORTED_MODULE_2__["default"]; //"EventBus" is the custom event that we'll be using to emit the logout event and listen to it in the Toolbar.vue
 // Ideally we should use VueX rather than this.

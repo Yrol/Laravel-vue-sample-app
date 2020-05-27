@@ -52,8 +52,8 @@ class QuestionsController extends Controller
         //when we use this method, we must make sure the "$fillable" variable is specified with mandatory fields in the relevant controller (in this case "/app/Http/Controllers/QuestionsController.php")
         //$request['slug'] = str_slug($request->title);//adding the slug value to manually using the title and in-build laravel "str_slug". This has been overridden in the Questions model via "boot" method
         //Questions::create($request->all());
-        auth()->user()->questions()->create($request->all());//Using the "auth" based on the relationship defined in "User.php" - return $this->hasMany(Questions::class);
-        return response('Created', Response::HTTP_CREATED);//on completion return success (HTTP_CREATED - 201)
+        $question = auth()->user()->questions()->create($request->all());//Using the "auth" based on the relationship defined in "User.php" - return $this->hasMany(Questions::class);
+        return response(new QuestionResource($question), Response::HTTP_CREATED);//on completion return success (HTTP_CREATED - 201)
     }
 
     /**

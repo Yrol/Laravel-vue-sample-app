@@ -8,12 +8,16 @@ import Vuetify from 'vuetify'
 import router from './router/Router.js'
 import User from './helpers/User'
 import VueSimplemde from 'vue-simplemde'
+import md from "marked"
 //import question from './components/forum/Question'
 
 require('./bootstrap');
 
 window.Vue = require('vue')
 Vue.use(Vuetify)
+
+//making the markdown editor global
+window.md = md
 
 //adding the "User" object globally within the application
 window.User = User

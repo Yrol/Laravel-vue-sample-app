@@ -76,7 +76,7 @@ export default {
         if(validateForrm) {
             let formData = { category_id: this.category.value, title: this.title, body: this.question }
             axios.post('/api/questions', formData)
-            .then(res => console.log(res.data.data))
+            .then(res => this.$router.push(res.data.path)) // redirecting the user to the newly created question page
             .catch(error => this.errors = error.response.data.error)
         }
     },
