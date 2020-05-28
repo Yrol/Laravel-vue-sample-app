@@ -2037,9 +2037,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
 /* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _helpers_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../helpers/User */ "./resources/js/helpers/User.js");
-/* harmony import */ var _router_Router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../router/Router */ "./resources/js/router/Router.js");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -2066,14 +2065,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     if (_helpers_User__WEBPACK_IMPORTED_MODULE_1__["default"].loggedIn()) {
-      _router_Router__WEBPACK_IMPORTED_MODULE_2__["default"].push({
+      this.$router.push({
         name: 'forum'
       });
     }
@@ -2414,11 +2412,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      question: null
+      question: null,
+      is_owner: false
     };
   },
   created: function created() {
@@ -2426,12 +2437,27 @@ __webpack_require__.r(__webpack_exports__);
 
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/questions/".concat(this.$route.params.slug)) // Using the Vue Route to get a single by slug (slug is the ID used for getting a single question: ex: http://localhost:8080/question/nemo-suscipit-fugiat-in-earum-dicta)
     .then(function (res) {
-      return _this.question = res.data.data;
+      _this.question = res.data.data, _this.is_owner = _this.question.uid === User.getUserID() ? true : false;
     });
   },
   computed: {
+    //render question body data in HTML format
     question_body: function question_body() {
       return md.parse(this.question.body);
+    }
+  },
+  methods: {
+    editQuestion: function editQuestion() {
+      console.log('delete question');
+    },
+    deleteQuestion: function deleteQuestion() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/questions/".concat(this.$route.params.slug)).then(function (res) {
+        _this2.$router.push({
+          name: 'forum'
+        });
+      });
     }
   }
 });
@@ -19215,7 +19241,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .login-text { margin-bottom: 1000px;} */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .login-text { margin-bottom: 1000px;} */\n", ""]);
 
 // exports
 
@@ -57359,9 +57385,85 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("v-card-title", { attrs: { "primary-title": "" } }, [
-            _c("div", [_c("h6", [_vm._v(_vm._s(_vm.question.date_readable))])])
-          ])
+          _c("v-card-text", [
+            _c("h6", [
+              _vm._v(
+                "Created by: " +
+                  _vm._s(_vm.question.user) +
+                  " : [" +
+                  _vm._s(_vm.question.date_readable) +
+                  "]"
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _vm.is_owner
+            ? _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "1" } },
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "mx-2",
+                              attrs: {
+                                fab: "",
+                                dark: "",
+                                large: "",
+                                color: "cyan"
+                              },
+                              on: { click: _vm.editQuestion }
+                            },
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v("mdi-pencil")
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "1" } },
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "mx-2",
+                              attrs: {
+                                fab: "",
+                                dark: "",
+                                large: "",
+                                color: "orange"
+                              },
+                              on: { click: _vm.deleteQuestion }
+                            },
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v("mdi-delete")
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            : _vm._e()
         ],
         1
       )

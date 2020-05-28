@@ -27,14 +27,13 @@
 <script>
 import { validationMixin } from "vuelidate";
 import User from "../../helpers/User"
-import router from "../../router/Router"
 import { required, maxLength, email } from "vuelidate/lib/validators";
 
 export default {
 
     created() {
         if(User.loggedIn()){
-            router.push({ name: 'forum'})
+            this.$router.push({ name: 'forum'})
         }
     },
 
