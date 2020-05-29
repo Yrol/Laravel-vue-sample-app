@@ -50,7 +50,7 @@ class AuthController extends Controller
      */
     public function signup(SignupRequest $request){
         $user = $request->all();
-        //$user['password'] = bcrypt($user['password']); //encrypting the password using bcrypt. We can also perform this inside the User class using a special function called "setPasswordAttribute"
+        //$user['password'] = bcrypt($user['password']); //encrypting the password using bcrypt. We can also perform this inside the User class using a special Laravel function called "setPasswordAttribute"
         User::create($user);//adding the new user
         return $this->login($request); // login the user using original request
     }

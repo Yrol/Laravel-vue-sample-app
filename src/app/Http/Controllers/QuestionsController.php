@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\QuestionResource;
 use App\Model\Questions;
+use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\HttpFoundation\Response;
@@ -124,10 +125,29 @@ class QuestionsController extends Controller
      * @param  \App\Model\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Questions $question, Request $request)
+    public function destroy(Questions $question)
     {
+        $question_id = $question->id;
+        $user_id = $question->user_id;//user who created the question
+        $current_user_id = auth()->user()->id;//logged in user
+
+        //check if the question belong to the currently logged in user and also if it exists
+        try{
+            if($user_id == $current_user_id) {
+                $fetched_question = Questions::where('id', $question_id)->exists();
+            }
+        }catch (Exception $e) {
+            return response($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+
+        //delete the question
+        if($fetched_question) {
+            $question->delete();
+        }
+
+        //only the lo
         //Method 1
-        $question->delete();
+        //$question->delete();
 
         //Method 2
         //Questions::destroy($id); //An ID variable need to be passed as an argument ("public function destroy($id)") instead of "Question $question" and need to make sure default identifier is not "slug"
