@@ -21,6 +21,8 @@
       single-line
       :rules="questionRules"
     ></v-textarea> -->
+
+    <!-- Using the markdownEditor (WYSWYG) library-->
     <vue-simplemde v-model="question" ref="markdownEditor" />
     <v-btn :disabled="!valid" color="success" class="mr-4" @click="submit">Create</v-btn>
     <v-btn color="error" class="mr-4" @click="reset">Reset</v-btn>
@@ -65,12 +67,16 @@ export default {
   },
 
     created() {
-        console.log('created')
+        this.getCategories()
+    },
+
+  methods: {
+
+    getCategories() {
         axios.get('/api/categories')
         .then(res => this.processCategories(res.data.data))
     },
 
-  methods: {
     submit() {
         const validateForrm = this.$refs.form.validate()
         if(validateForrm) {

@@ -19,6 +19,8 @@ class QuestionResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'category_id' => $this->category->id,
+            'slug' => $this->slug,
             'path' => $this->path, //path will be returned from the Laravel's "getPathAttribute" function which we've overridden in the "Questions" model
             'body' => $this->body,
             'created_at' => $this->created_at,

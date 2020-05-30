@@ -100,6 +100,7 @@ class QuestionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Model\Questions  $questions
      * @return \Illuminate\Http\Response
+     * Question can be updated using PUT requests: ex: "http://localhost:8080/api/questions/this-is-the-test-title (identified by the question's slug)" and in the body we can pass
      */
     public function update(Request $request, Questions $question)
     {
@@ -115,7 +116,7 @@ class QuestionsController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             return response('An error occurred', Response::HTTP_BAD_GATEWAY);
         }
-        return response("Updated", Response::HTTP_ACCEPTED);
+        return response(new QuestionResource($question), Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -124,6 +125,7 @@ class QuestionsController extends Controller
      * Delete by  ID: http://localhost:8080/api/questions/1
      * @param  \App\Model\Questions  $questions
      * @return \Illuminate\Http\Response
+     * Question can be deleted using DELETE request. ex: http://localhost:8080/api/questions/this-is-for-testing (identified by question slug) and in the header we can pass the Authorization token. Ex: "Bearer TOKEN"
      */
     public function destroy(Questions $question)
     {

@@ -44,7 +44,7 @@ export default {
     computed: {
         //render question body data in HTML format
         question_body() {
-        return md.parse(this.question_data.body);
+            return md.parse(this.question_data.body);
         }
     },
 

@@ -17,6 +17,11 @@ class Questions extends Model
         static::creating(function($question){
             $question->slug = str_slug($question->title);
         });
+
+        //Adding the additional functionality (create a slug using the title) whenever this model gets updated (during HTTP requests when creating a question & etc)
+        static::updating(function($question){
+            $question->slug = str_slug($question->title);
+        });
     }
 
     /**
