@@ -22,7 +22,7 @@
 <script>
 import toolbar from "./Toolbar"
 import AppFooter from "./AppFooter"
-import Login from "./login/Login"
+import Login from "./auth/Login"
 import SignUp from "./signup/SignUp"
 import User from '../helpers/User'
 

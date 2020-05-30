@@ -18,7 +18,6 @@
 <script>
 import question from "./Questions";
 import axios, {AxiosResponse} from 'axios';
-name: "QuestionComponent";
 export default {
 
   data() {
