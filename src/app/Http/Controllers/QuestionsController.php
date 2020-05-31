@@ -6,6 +6,7 @@ use App\Http\Resources\QuestionResource;
 use App\Model\Questions;
 use Exception;
 use Illuminate\Http\Request;
+use App\Http\Requests\QuestionRequest;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,7 +38,7 @@ class QuestionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(QuestionRequest $request)
     {
         //Method 1 - defining everything one by one
         // $question = new Questions;
@@ -102,7 +103,7 @@ class QuestionsController extends Controller
      * @return \Illuminate\Http\Response
      * Question can be updated using PUT requests: ex: "http://localhost:8080/api/questions/this-is-the-test-title (identified by the question's slug)" and in the body we can pass
      */
-    public function update(Request $request, Questions $question)
+    public function update(QuestionRequest $request, Questions $question)
     {
         //Multiple lines search the record by ID (in this case we should replace the "Questions $question" argument with $id and pass the ID in the API request)
         // $question = Questions::where('id', $id)->first();

@@ -136,7 +136,7 @@
                 .then(() => {
                     console.log('register successful we can redirect from this view')
                 })
-                .catch(error => {//Injecting serverside validation errors to the form in-case
+                .catch(error => {//Injecting serverside validation errors to the form in-case the frontend could not handle them during submission
                     this.name.error = error.response.data.errors.name,
                     this.email.error = error.response.data.errors.email,
                     this.password.error = error.response.data.errors.password

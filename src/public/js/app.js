@@ -2839,7 +2839,7 @@ __webpack_require__.r(__webpack_exports__);
         User.signup(data).then(function () {
           console.log('register successful we can redirect from this view');
         })["catch"](function (error) {
-          //Injecting serverside validation errors to the form in-case
+          //Injecting serverside validation errors to the form in-case the frontend could not handle them during submission
           _this.name.error = error.response.data.errors.name, _this.email.error = error.response.data.errors.email, _this.password.error = error.response.data.errors.password;
         });
       }
