@@ -2221,6 +2221,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         return !v || v && v.length >= 8 || 'Minimum length is 8 characters';
       }],
       //Category
+      categories: null,
       category: '',
       categoryRules: [function (value) {
         return !!value || "Required.";
@@ -2238,7 +2239,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var _this = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/api/categories').then(function (res) {
-        return _this.processCategories(res.data.data);
+        _this.categories = res.data.data;
+
+        _this.processCategories(_this.categories);
       });
     },
     submit: function submit() {
@@ -2376,7 +2379,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     };
   },
   created: function created() {
-    console.log(this.question_data.slug);
     this.getCategories();
   },
   methods: {
@@ -2391,6 +2393,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var _this2 = this;
 
       var validateForrm = this.$refs.form.validate();
+      var current_path = "/question/".concat(this.question_data.slug);
 
       if (validateForrm) {
         var formData = {
@@ -2399,9 +2402,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           body: this.question
         };
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.put("/api/questions/".concat(this.question_data.slug), formData).then(function (res) {
-          _this2.$router.push(res.data.path); // redirecting the user to the newly created question page
-          //this.$router.go(0)
+          //this to avoid the "NavigationDuplicated" error when the title remain the same (slug) and try to route push to the same path
+          if (current_path !== res.data.path) {
+            _this2.$router.push(res.data.path); // redirecting the user to the newly created question page
 
+          }
 
           EventBus.$emit('finishEdit');
         })["catch"](function (error) {
@@ -2409,17 +2414,19 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         });
       }
     },
-    reset: function reset() {
-      this.$refs.form.reset();
+    //cancel the edit
+    cancel: function cancel() {
+      EventBus.$emit('finishEdit');
     },
+    // reset() {
+    //   this.$refs.form.reset();
+    // },
     //process and adding the categories into the categories array
     processCategories: function processCategories(catData) {
       for (var _i = 0, _Object$entries = Object.entries(catData); _i < _Object$entries.length; _i++) {
         var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
             key = _Object$entries$_i[0],
             value = _Object$entries$_i[1];
-
-        console.log(value.id);
 
         if (key == this.question_data.category_id) {
           this.category = {
@@ -57187,90 +57194,92 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "v-form",
-        {
-          ref: "form",
-          attrs: { "lazy-validation": "" },
-          model: {
-            value: _vm.valid,
-            callback: function($$v) {
-              _vm.valid = $$v
-            },
-            expression: "valid"
-          }
-        },
+  return _vm.categories
+    ? _c(
+        "div",
         [
-          _c("v-combobox", {
-            attrs: {
-              items: _vm.categoryItems,
-              label: "Select a question category",
-              required: "",
-              rules: _vm.categoryRules
-            },
-            model: {
-              value: _vm.category,
-              callback: function($$v) {
-                _vm.category = $$v
-              },
-              expression: "category"
-            }
-          }),
-          _vm._v(" "),
-          _c("v-divider"),
-          _vm._v(" "),
-          _c("v-text-field", {
-            attrs: { rules: _vm.titleRules, label: "Title", required: "" },
-            model: {
-              value: _vm.title,
-              callback: function($$v) {
-                _vm.title = $$v
-              },
-              expression: "title"
-            }
-          }),
-          _vm._v(" "),
-          _c("v-divider"),
-          _vm._v(" "),
-          _c("vue-simplemde", {
-            ref: "markdownEditor",
-            model: {
-              value: _vm.question,
-              callback: function($$v) {
-                _vm.question = $$v
-              },
-              expression: "question"
-            }
-          }),
-          _vm._v(" "),
           _c(
-            "v-btn",
+            "v-form",
             {
-              staticClass: "mr-4",
-              attrs: { disabled: !_vm.valid, color: "success" },
-              on: { click: _vm.submit }
+              ref: "form",
+              attrs: { "lazy-validation": "" },
+              model: {
+                value: _vm.valid,
+                callback: function($$v) {
+                  _vm.valid = $$v
+                },
+                expression: "valid"
+              }
             },
-            [_vm._v("Create")]
-          ),
-          _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              staticClass: "mr-4",
-              attrs: { color: "error" },
-              on: { click: _vm.reset }
-            },
-            [_vm._v("Reset")]
+            [
+              _c("v-combobox", {
+                attrs: {
+                  items: _vm.categoryItems,
+                  label: "Select a question category",
+                  required: "",
+                  rules: _vm.categoryRules
+                },
+                model: {
+                  value: _vm.category,
+                  callback: function($$v) {
+                    _vm.category = $$v
+                  },
+                  expression: "category"
+                }
+              }),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c("v-text-field", {
+                attrs: { rules: _vm.titleRules, label: "Title", required: "" },
+                model: {
+                  value: _vm.title,
+                  callback: function($$v) {
+                    _vm.title = $$v
+                  },
+                  expression: "title"
+                }
+              }),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c("vue-simplemde", {
+                ref: "markdownEditor",
+                model: {
+                  value: _vm.question,
+                  callback: function($$v) {
+                    _vm.question = $$v
+                  },
+                  expression: "question"
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  staticClass: "mr-4",
+                  attrs: { disabled: !_vm.valid, color: "success" },
+                  on: { click: _vm.submit }
+                },
+                [_vm._v("Create")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  staticClass: "mr-4",
+                  attrs: { color: "error" },
+                  on: { click: _vm.reset }
+                },
+                [_vm._v("Reset")]
+              )
+            ],
+            1
           )
         ],
         1
       )
-    ],
-    1
-  )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -57361,7 +57370,7 @@ var render = function() {
                   attrs: { disabled: !_vm.valid, color: "success" },
                   on: { click: _vm.submit }
                 },
-                [_vm._v("Create")]
+                [_vm._v("Update")]
               ),
               _vm._v(" "),
               _c(
@@ -57369,9 +57378,9 @@ var render = function() {
                 {
                   staticClass: "mr-4",
                   attrs: { color: "error" },
-                  on: { click: _vm.reset }
+                  on: { click: _vm.cancel }
                 },
-                [_vm._v("Reset")]
+                [_vm._v("Cancel")]
               )
             ],
             1
@@ -57466,6 +57475,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-card",
+    { staticClass: "mt-2" },
     [
       _c(
         "v-card-text",

@@ -1,6 +1,6 @@
 <!-- Template to display a questiona as an item (card) in list of questions page-->
 <template>
-  <v-card>
+  <v-card class="mt-2">
     <v-card-text>
       <v-layout align-center>
         <v-flex xs7>

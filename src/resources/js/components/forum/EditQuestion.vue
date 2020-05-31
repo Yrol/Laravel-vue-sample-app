@@ -25,8 +25,8 @@
 
       <!-- Using the markdownEditor (WYSWYG) library-->
       <vue-simplemde v-model="question" ref="markdownEditor" />
-      <v-btn :disabled="!valid" color="success" class="mr-4" @click="submit">Create</v-btn>
-      <v-btn color="error" class="mr-4" @click="reset">Reset</v-btn>
+      <v-btn :disabled="!valid" color="success" class="mr-4" @click="submit">Update</v-btn>
+      <v-btn color="error" class="mr-4" @click="cancel">Cancel</v-btn>
     </v-form>
   </div>
 </template>
@@ -72,7 +72,6 @@ props: ['question_data'],
   },
 
     created() {
-        console.log(this.question_data.slug)
         this.getCategories()
     },
 
@@ -85,26 +84,34 @@ props: ['question_data'],
 
     submit() {
         const validateForrm = this.$refs.form.validate()
+        const current_path = `/question/${this.question_data.slug}`
         if(validateForrm) {
             let formData = { category_id: this.category.value, title: this.title, body: this.question }
             axios.put (`/api/questions/${this.question_data.slug}`, formData)
             .then(res => {
-                this.$router.push(res.data.path) // redirecting the user to the newly created question page
-                //this.$router.go(0)
+
+                //this to avoid the "NavigationDuplicated" error when the title remain the same (slug) and try to route push to the same path
+                if(current_path !== res.data.path) {
+                    this.$router.push(res.data.path) // redirecting the user to the newly created question page
+                }
                 EventBus.$emit('finishEdit')
             })
             .catch(error => this.errors = error.response.data.error)
         }
     },
 
-    reset() {
-      this.$refs.form.reset();
+    //cancel the edit
+    cancel() {
+        EventBus.$emit('finishEdit')
     },
+
+    // reset() {
+    //   this.$refs.form.reset();
+    // },
 
     //process and adding the categories into the categories array
     processCategories(catData) {
         for (let [key, value] of Object.entries(catData)) {
-            console.log(value.id)
             if(key == this.question_data.category_id) {
                 this.category = { text: value.name, value: value.id }
             }

@@ -1,6 +1,6 @@
 <!-- View for Creating  a new question -->
 <template>
-<div>
+<div v-if="categories">
     <v-form ref="form" v-model="valid" lazy-validation>
     <v-combobox
         v-model="category"
@@ -54,6 +54,7 @@ export default {
       ],
 
       //Category
+      categories: null,
       category:'',
       categoryRules: [
           value => !!value || "Required.",
@@ -74,7 +75,10 @@ export default {
 
     getCategories() {
         axios.get('/api/categories')
-        .then(res => this.processCategories(res.data.data))
+        .then(res => {
+            this.categories = res.data.data
+            this.processCategories(this.categories)
+        })
     },
 
     submit() {
