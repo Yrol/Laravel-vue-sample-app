@@ -3,14 +3,15 @@
 <div v-if="categories">
     <v-form ref="form" v-model="valid" lazy-validation>
     <v-combobox
-        v-model="category"
+        v-model="category.value"
         :items="categoryItems"
         label="Select a question category"
-        required
         :rules="categoryRules"
+        :error-messages="category.error"
+        required
     ></v-combobox>
     <v-divider></v-divider>
-    <v-text-field v-model="title" :rules="titleRules" label="Title" required></v-text-field>
+    <v-text-field v-model="title.value" :rules="titleRules" :error-messages="title.error" label="Title"></v-text-field>
     <v-divider></v-divider>
     <!-- <v-textarea
       v-model="question"
@@ -23,7 +24,8 @@
     ></v-textarea> -->
 
     <!-- Using the markdownEditor (WYSWYG) library-->
-    <vue-simplemde v-model="question" ref="markdownEditor" />
+    <vue-simplemde v-model="question.value" :error-messages="question.error" ref="markdownEditor" />
+
     <v-btn :disabled="!valid" color="success" class="mr-4" @click="submit">Create</v-btn>
     <v-btn color="error" class="mr-4" @click="reset">Reset</v-btn>
   </v-form>
@@ -34,20 +36,24 @@ import { required, maxLength } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
 import axios from "axios";
 export default {
-  data() {
-    return {
-      valid: true,
+    data: () => ({
+        valid: true,
 
       //Question title
-      titleServerErrors: "test error",
-      title: '',
+      title: {
+          value:'',
+          error:''
+      },
       titleRules: [
         value => !!value || "Required.",
         v => (!v ||v && v.length >= 8) || 'Minimum length is 8 characters'
       ],
 
       //Question
-      question: '',
+      question: {
+          value: '',
+          error: ''
+      },
       questionRules: [
          value => !!value || "Required.",
          v => (!v ||v && v.length >= 8) || 'Minimum length is 8 characters'
@@ -55,7 +61,10 @@ export default {
 
       //Category
       categories: null,
-      category:'',
+      category: {
+          value: '',
+          error: ''
+      },
       categoryRules: [
           value => !!value || "Required.",
       ],
@@ -64,8 +73,7 @@ export default {
 
       //object that holds the errors which can be used for outputting errors when required
       errors:{}
-    };
-  },
+    }),
 
     created() {
         this.getCategories()
@@ -84,10 +92,14 @@ export default {
     submit() {
         const validateForrm = this.$refs.form.validate()
         if(validateForrm) {
-            let formData = { category_id: this.category.value, title: this.title, body: this.question }
+            let formData = { category_id: this.category.value.value, title: this.title.value, body: this.question.value }
             axios.post('/api/questions', formData)
             .then(res => this.$router.push(res.data.path)) // redirecting the user to the newly created question page
-            .catch(error => this.errors = error.response.data.error)
+            .catch(error => {
+                this.question.error = error.response.data.errors.body,
+                this.title.error = error.response.data.errors.title
+                this.category.error = error.response.data.errors.category_id
+            })
         }
     },
 

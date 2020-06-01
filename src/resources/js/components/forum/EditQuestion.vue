@@ -4,14 +4,14 @@
   <div v-if="categoriesLoaded">
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-combobox
-        v-model="category"
+        v-model="category.value"
         :items="categoryItems"
         label="Select a question category"
+        :error-messages="category.error"
         required
-        :rules="categoryRules"
       ></v-combobox>
       <v-divider></v-divider>
-      <v-text-field v-model="title" :rules="titleRules" label="Title" required></v-text-field>
+      <v-text-field v-model="title.value" label="Title" :error-messages="title.error" required></v-text-field>
       <v-divider></v-divider>
       <!-- <v-textarea
       v-model="question"
@@ -24,7 +24,7 @@
       ></v-textarea>-->
 
       <!-- Using the markdownEditor (WYSWYG) library-->
-      <vue-simplemde v-model="question" ref="markdownEditor" />
+      <vue-simplemde v-model="question.value" :error-messages="question.error" required ref="markdownEditor" />
       <v-btn :disabled="!valid" color="success" class="mr-4" @click="submit">Update</v-btn>
       <v-btn color="error" class="mr-4" @click="cancel">Cancel</v-btn>
     </v-form>
@@ -43,22 +43,31 @@ props: ['question_data'],
       valid: true,
 
       //Question title
-      titleServerErrors: "test error",
-      title: this.question_data.title,
+      title: {
+          value: this.question_data.title,
+          error: ''
+      },
+
       titleRules: [
         value => !!value || "Required.",
         v => (!v ||v && v.length >= 8) || 'Minimum length is 8 characters'
       ],
 
       //Question
-      question: this.question_data.body,
+      question: {
+          value: this.question_data.body,
+          error: ''
+      },
       questionRules: [
          value => !!value || "Required.",
          v => (!v ||v && v.length >= 8) || 'Minimum length is 8 characters'
       ],
 
       //Category
-      category:'',
+      category: {
+          value: '',
+          error: ''
+      },
       categoriesLoaded: false,
       categoryRules: [
           value => !!value || "Required.",
@@ -86,7 +95,7 @@ props: ['question_data'],
         const validateForrm = this.$refs.form.validate()
         const current_path = `/question/${this.question_data.slug}`
         if(validateForrm) {
-            let formData = { category_id: this.category.value, title: this.title, body: this.question }
+            let formData = { category_id: this.category.value.value, title: this.title.value, body: this.question.value }
             axios.put (`/api/questions/${this.question_data.slug}`, formData)
             .then(res => {
 
@@ -96,7 +105,11 @@ props: ['question_data'],
                 }
                 EventBus.$emit('finishEdit')
             })
-            .catch(error => this.errors = error.response.data.error)
+            .catch(error => {
+                this.question.error = error.response.data.errors.body,
+                this.title.error = error.response.data.errors.title
+                this.category.error = error.response.data.errors.category_id
+            })
         }
     },
 
@@ -112,8 +125,10 @@ props: ['question_data'],
     //process and adding the categories into the categories array
     processCategories(catData) {
         for (let [key, value] of Object.entries(catData)) {
+
+            //selected category
             if(key == this.question_data.category_id) {
-                this.category = { text: value.name, value: value.id }
+                this.category.value = { text: value.name, value: value.id }
             }
             var itemObj = { text: value.name, value: value.id }
             this.categoryItems.push(itemObj)

@@ -2198,6 +2198,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
 
 
 
@@ -2206,15 +2208,20 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     return {
       valid: true,
       //Question title
-      titleServerErrors: "test error",
-      title: '',
+      title: {
+        value: '',
+        error: ''
+      },
       titleRules: [function (value) {
         return !!value || "Required.";
       }, function (v) {
         return !v || v && v.length >= 8 || 'Minimum length is 8 characters';
       }],
       //Question
-      question: '',
+      question: {
+        value: '',
+        error: ''
+      },
       questionRules: [function (value) {
         return !!value || "Required.";
       }, function (v) {
@@ -2222,7 +2229,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       }],
       //Category
       categories: null,
-      category: '',
+      category: {
+        value: '',
+        error: ''
+      },
       categoryRules: [function (value) {
         return !!value || "Required.";
       }],
@@ -2251,15 +2261,16 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
       if (validateForrm) {
         var formData = {
-          category_id: this.category.value,
-          title: this.title,
-          body: this.question
+          category_id: this.category.value.value,
+          title: this.title.value,
+          body: this.question.value
         };
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/api/questions', formData).then(function (res) {
           return _this2.$router.push(res.data.path);
         }) // redirecting the user to the newly created question page
         ["catch"](function (error) {
-          return _this2.errors = error.response.data.error;
+          _this2.question.error = error.response.data.errors.body, _this2.title.error = error.response.data.errors.title;
+          _this2.category.error = error.response.data.errors.category_id;
         });
       }
     },
@@ -2353,22 +2364,30 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     return {
       valid: true,
       //Question title
-      titleServerErrors: "test error",
-      title: this.question_data.title,
+      title: {
+        value: this.question_data.title,
+        error: ''
+      },
       titleRules: [function (value) {
         return !!value || "Required.";
       }, function (v) {
         return !v || v && v.length >= 8 || 'Minimum length is 8 characters';
       }],
       //Question
-      question: this.question_data.body,
+      question: {
+        value: this.question_data.body,
+        error: ''
+      },
       questionRules: [function (value) {
         return !!value || "Required.";
       }, function (v) {
         return !v || v && v.length >= 8 || 'Minimum length is 8 characters';
       }],
       //Category
-      category: '',
+      category: {
+        value: '',
+        error: ''
+      },
       categoriesLoaded: false,
       categoryRules: [function (value) {
         return !!value || "Required.";
@@ -2397,9 +2416,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
       if (validateForrm) {
         var formData = {
-          category_id: this.category.value,
-          title: this.title,
-          body: this.question
+          category_id: this.category.value.value,
+          title: this.title.value,
+          body: this.question.value
         };
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.put("/api/questions/".concat(this.question_data.slug), formData).then(function (res) {
           //this to avoid the "NavigationDuplicated" error when the title remain the same (slug) and try to route push to the same path
@@ -2410,7 +2429,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
           EventBus.$emit('finishEdit');
         })["catch"](function (error) {
-          return _this2.errors = error.response.data.error;
+          _this2.question.error = error.response.data.errors.body, _this2.title.error = error.response.data.errors.title;
+          _this2.category.error = error.response.data.errors.category_id;
         });
       }
     },
@@ -2428,8 +2448,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
             key = _Object$entries$_i[0],
             value = _Object$entries$_i[1];
 
+        //selected category
         if (key == this.question_data.category_id) {
-          this.category = {
+          this.category.value = {
             text: value.name,
             value: value.id
           };
@@ -57216,28 +57237,33 @@ var render = function() {
                 attrs: {
                   items: _vm.categoryItems,
                   label: "Select a question category",
-                  required: "",
-                  rules: _vm.categoryRules
+                  rules: _vm.categoryRules,
+                  "error-messages": _vm.category.error,
+                  required: ""
                 },
                 model: {
-                  value: _vm.category,
+                  value: _vm.category.value,
                   callback: function($$v) {
-                    _vm.category = $$v
+                    _vm.$set(_vm.category, "value", $$v)
                   },
-                  expression: "category"
+                  expression: "category.value"
                 }
               }),
               _vm._v(" "),
               _c("v-divider"),
               _vm._v(" "),
               _c("v-text-field", {
-                attrs: { rules: _vm.titleRules, label: "Title", required: "" },
+                attrs: {
+                  rules: _vm.titleRules,
+                  "error-messages": _vm.title.error,
+                  label: "Title"
+                },
                 model: {
-                  value: _vm.title,
+                  value: _vm.title.value,
                   callback: function($$v) {
-                    _vm.title = $$v
+                    _vm.$set(_vm.title, "value", $$v)
                   },
-                  expression: "title"
+                  expression: "title.value"
                 }
               }),
               _vm._v(" "),
@@ -57245,12 +57271,13 @@ var render = function() {
               _vm._v(" "),
               _c("vue-simplemde", {
                 ref: "markdownEditor",
+                attrs: { "error-messages": _vm.question.error },
                 model: {
-                  value: _vm.question,
+                  value: _vm.question.value,
                   callback: function($$v) {
-                    _vm.question = $$v
+                    _vm.$set(_vm.question, "value", $$v)
                   },
-                  expression: "question"
+                  expression: "question.value"
                 }
               }),
               _vm._v(" "),
@@ -57325,28 +57352,32 @@ var render = function() {
                 attrs: {
                   items: _vm.categoryItems,
                   label: "Select a question category",
-                  required: "",
-                  rules: _vm.categoryRules
+                  "error-messages": _vm.category.error,
+                  required: ""
                 },
                 model: {
-                  value: _vm.category,
+                  value: _vm.category.value,
                   callback: function($$v) {
-                    _vm.category = $$v
+                    _vm.$set(_vm.category, "value", $$v)
                   },
-                  expression: "category"
+                  expression: "category.value"
                 }
               }),
               _vm._v(" "),
               _c("v-divider"),
               _vm._v(" "),
               _c("v-text-field", {
-                attrs: { rules: _vm.titleRules, label: "Title", required: "" },
+                attrs: {
+                  label: "Title",
+                  "error-messages": _vm.title.error,
+                  required: ""
+                },
                 model: {
-                  value: _vm.title,
+                  value: _vm.title.value,
                   callback: function($$v) {
-                    _vm.title = $$v
+                    _vm.$set(_vm.title, "value", $$v)
                   },
-                  expression: "title"
+                  expression: "title.value"
                 }
               }),
               _vm._v(" "),
@@ -57354,12 +57385,13 @@ var render = function() {
               _vm._v(" "),
               _c("vue-simplemde", {
                 ref: "markdownEditor",
+                attrs: { "error-messages": _vm.question.error, required: "" },
                 model: {
-                  value: _vm.question,
+                  value: _vm.question.value,
                   callback: function($$v) {
-                    _vm.question = $$v
+                    _vm.$set(_vm.question, "value", $$v)
                   },
-                  expression: "question"
+                  expression: "question.value"
                 }
               }),
               _vm._v(" "),
