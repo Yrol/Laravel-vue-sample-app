@@ -28,8 +28,15 @@ class QuestionsController extends Controller
         //Using Eloquent to get all the news in latest order. This is wil expose all the data
         //return Questions::latest()->get();
 
-        //Using the "QuestionResource" API Resource wrapper to expose only the specified data
-        return QuestionResource::collection(Questions::latest()->get());
+        //Use pagination
+        //return Questions::latest()->paginate(1);
+
+        //Using the "QuestionResource" API Resource wrapper to expose only the specified data without pagination
+        //return QuestionResource::collection(Questions::latest());
+
+        //Using the "QuestionResource" API Resource wrapper to expose only the specified data with pagination
+        return QuestionResource::collection(Questions::latest()->paginate(5));
+
     }
 
     /**

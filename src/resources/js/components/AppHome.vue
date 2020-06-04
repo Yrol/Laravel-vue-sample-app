@@ -2,7 +2,7 @@
   <div>
     <toolbar></toolbar>
     <!-- The body content goes inside "v-content" -->
-   <v-content>
+   <v-content class="main-content">
       <v-container fluid fill-height>
         <v-layout row wrap child-flex align-center style="position: relative;">
           <v-flex xs12 >

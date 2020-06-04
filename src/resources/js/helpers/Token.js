@@ -20,6 +20,15 @@ class Token {
         //using "atob" to decode base64 token payload
         return JSON.parse(atob(payload))
     }
+
+    //try to decode the encoded token (using for validation purposes above)
+    // isBase64(token){
+    //     try{
+    //         return btoa(atob(token)).replace(/=/g,'') == token
+    //     }catch(err) {
+    //         return false
+    //     }
+    // }
 }
 
 export default Token = new Token()
