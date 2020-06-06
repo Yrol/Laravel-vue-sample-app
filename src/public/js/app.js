@@ -2448,6 +2448,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.put("/api/questions/".concat(this.question_data.slug), formData).then(function (res) {
           //this to avoid the "NavigationDuplicated" error when the title remain the same (slug) and try to route push to the same path
           if (current_path !== res.data.path) {
+            console.log("Data path: ".concat(res.data.path));
+
             _this2.$router.push(res.data.path); // redirecting the user to the newly created question page
 
           }
@@ -2533,6 +2535,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       questions: {},
       page: 1,
+      //current page for pagination to be highlighted
       meta: {} // meta holds the pagination metadata ( suchs as next & previous page indexes) returned by Laravel pagination
 
     };
@@ -2541,17 +2544,32 @@ __webpack_require__.r(__webpack_exports__);
     question: _Questions__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   created: function created() {
-    this.getData(1);
+    if (Math.sign(this.$route.params.pagination_id) > 0) {
+      var pagination_id = parseInt(this.$route.params.pagination_id);
+      this.page = pagination_id;
+      this.getData(pagination_id);
+    } else {
+      this.page = 1;
+      this.getData(1);
+    }
   },
   methods: {
     //pagination method
     changePage: function changePage(page) {
+      //go to the route - "/forum/:pagination_id"
+      this.$router.push("/forum/".concat(page))["catch"](function (error) {
+        console.log(error);
+      });
       this.getData(page);
     },
     getData: function getData(page) {
       var _this = this;
 
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/questions?page=".concat(page)).then(function (res) {
+        if (!res.data.data) {
+          console.log('no data found - show message no data found');
+        }
+
         _this.questions = res.data.data;
         _this.meta = res.data.meta;
       }) // assigining to the "questions variable above"
@@ -118138,6 +118156,9 @@ var routes = [{
   component: _components_signup_SignUp__WEBPACK_IMPORTED_MODULE_4__["default"]
 }, {
   path: '/forum/:pagination_id',
+  component: _components_forum_Forum__WEBPACK_IMPORTED_MODULE_5__["default"]
+}, {
+  path: '/forum',
   component: _components_forum_Forum__WEBPACK_IMPORTED_MODULE_5__["default"],
   name: 'forum'
 }, {

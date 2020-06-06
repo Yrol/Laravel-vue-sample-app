@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       questions: {},
-      page: 1,
+      page: 1, //current page for pagination to be highlighted
       meta: {} // meta holds the pagination metadata ( suchs as next & previous page indexes) returned by Laravel pagination
     };
   },
@@ -32,13 +32,24 @@ export default {
   components: { question },
 
   created() {
-      this.getData(1)
+      if(Math.sign(this.$route.params.pagination_id) > 0) {
+        let pagination_id = parseInt(this.$route.params.pagination_id)
+        this.page = pagination_id
+        this.getData(pagination_id)
+      }else{
+        this.page = 1
+        this.getData(1)
+      }
   },
 
   methods:{
 
       //pagination method
       changePage(page){
+          //go to the route - "/forum/:pagination_id"
+          this.$router.push(`/forum/${page}`).catch(error => {
+              console.log(error)
+          });
           this.getData(page)
       },
 
@@ -46,6 +57,9 @@ export default {
         axios
             .get(`/api/questions?page=${page}`)
             .then(res => {
+                if(!res.data.data) {
+                    console.log('no data found - show message no data found')
+                }
                 this.questions = res.data.data
                 this.meta = res.data.meta
         }) // assigining to the "questions variable above"

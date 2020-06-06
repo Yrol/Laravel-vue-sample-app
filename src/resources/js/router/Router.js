@@ -15,7 +15,8 @@ const routes = [
     { path:  '/login', component: Login },
     { path: '/logout', component: Logout },
     { path:  '/signup', component: SignUp },
-    { path: '/forum/:pagination_id', component: Forum, name: 'forum' },
+    { path: '/forum/:pagination_id', component: Forum },
+    { path: '/forum', component: Forum, name: 'forum' },
     { path: '/ask', component: AskQuestion, name: 'ask' },
     { path: '/question/:slug', component: ShowQuestion, name: 'showquestion' }, //Route for reading a single question by using the slug. Ex: http://localhost:8080/api/question/this-is-the-test-title
     { path: '*', component: NotFound }

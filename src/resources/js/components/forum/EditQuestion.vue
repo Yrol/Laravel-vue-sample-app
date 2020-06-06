@@ -101,6 +101,7 @@ props: ['question_data'],
 
                 //this to avoid the "NavigationDuplicated" error when the title remain the same (slug) and try to route push to the same path
                 if(current_path !== res.data.path) {
+                    console.log(`Data path: ${res.data.path}`)
                     this.$router.push(res.data.path) // redirecting the user to the newly created question page
                 }
                 EventBus.$emit('finishEdit')
