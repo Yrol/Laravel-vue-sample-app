@@ -34,7 +34,7 @@ class QuestionsController extends Controller
         //Using the "QuestionResource" API Resource wrapper to expose only the specified data without pagination
         //return QuestionResource::collection(Questions::latest());
 
-        //Using the "QuestionResource" API Resource wrapper to expose only the specified data with pagination
+        //Using the "QuestionResource" API Resource wrapper to expose only the specified data with pagination - set to return 5 items per page
         return QuestionResource::collection(Questions::latest()->paginate(5));
 
     }

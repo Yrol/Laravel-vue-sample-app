@@ -25,3 +25,4 @@ Route::view('/', 'home');
  */
 Route::view('/{any}', 'home');
 Route::view('/question/{any}', 'home');//route for viewing a single question
+Route::view('/forum/{any}', 'home');
