@@ -1,5 +1,5 @@
 <template>
-  <v-container class="grey lighten-5">
+  <v-container v-if="!loadingQuestions" class="grey lighten-5">
     <div v-if="questions">
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="8">
@@ -23,6 +23,7 @@ import axios, { AxiosResponse } from "axios";
 export default {
   data() {
     return {
+      loadingQuestions: false,
       questions: {},
       page: 1, //current page for pagination to be highlighted
       meta: {} // meta holds the pagination metadata ( suchs as next & previous page indexes) returned by Laravel pagination
@@ -54,6 +55,7 @@ export default {
       },
 
       getData(page){
+        this.loadingQuestions = true
         axios
             .get(`/api/questions?page=${page}`)
             .then(res => {
@@ -62,8 +64,13 @@ export default {
                 }
                 this.questions = res.data.data
                 this.meta = res.data.meta
+                this.loadingQuestions = false
         }) // assigining to the "questions variable above"
-        .catch(error => console.log(error.response.data));
+        .catch(error => {
+            //show error
+            console.log(error.response.data)
+            this.loadingQuestions = false
+        });
       }
   }
 };

@@ -2533,6 +2533,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      loadingQuestions: false,
       questions: {},
       page: 1,
       //current page for pagination to be highlighted
@@ -2565,6 +2566,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData(page) {
       var _this = this;
 
+      this.loadingQuestions = true;
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/questions?page=".concat(page)).then(function (res) {
         if (!res.data.data) {
           console.log('no data found - show message no data found');
@@ -2572,9 +2574,12 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.questions = res.data.data;
         _this.meta = res.data.meta;
+        _this.loadingQuestions = false;
       }) // assigining to the "questions variable above"
       ["catch"](function (error) {
-        return console.log(error.response.data);
+        //show error
+        console.log(error.response.data);
+        _this.loadingQuestions = false;
       });
     }
   }
@@ -57542,59 +57547,63 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-container", { staticClass: "grey lighten-5" }, [
-    _vm.questions
-      ? _c(
-          "div",
-          [
-            _c(
-              "v-row",
-              { attrs: { "no-gutters": "" } },
+  return !_vm.loadingQuestions
+    ? _c("v-container", { staticClass: "grey lighten-5" }, [
+        _vm.questions
+          ? _c(
+              "div",
               [
                 _c(
-                  "v-col",
-                  { attrs: { cols: "12", sm: "6", md: "8" } },
+                  "v-row",
+                  { attrs: { "no-gutters": "" } },
                   [
-                    _vm._l(_vm.questions, function(question) {
-                      return _c("question", {
-                        key: question.id,
-                        attrs: { question_data: question }
-                      })
-                    }),
+                    _c(
+                      "v-col",
+                      { attrs: { cols: "12", sm: "6", md: "8" } },
+                      [
+                        _vm._l(_vm.questions, function(question) {
+                          return _c("question", {
+                            key: question.id,
+                            attrs: { question_data: question }
+                          })
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "text-center" },
+                          [
+                            _c("v-pagination", {
+                              attrs: { length: _vm.meta.last_page },
+                              on: { input: _vm.changePage },
+                              model: {
+                                value: _vm.page,
+                                callback: function($$v) {
+                                  _vm.page = $$v
+                                },
+                                expression: "page"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      2
+                    ),
                     _vm._v(" "),
                     _c(
-                      "div",
-                      { staticClass: "text-center" },
+                      "v-col",
+                      { attrs: { cols: "6", md: "4" } },
                       [
-                        _c("v-pagination", {
-                          attrs: { length: _vm.meta.last_page },
-                          on: { input: _vm.changePage },
-                          model: {
-                            value: _vm.page,
-                            callback: function($$v) {
-                              _vm.page = $$v
-                            },
-                            expression: "page"
-                          }
-                        })
+                        _c(
+                          "v-card",
+                          {
+                            staticClass: "pa-2",
+                            attrs: { outlined: "", tile: "" }
+                          },
+                          [_vm._v("sidebar")]
+                        )
                       ],
                       1
-                    )
-                  ],
-                  2
-                ),
-                _vm._v(" "),
-                _c(
-                  "v-col",
-                  { attrs: { cols: "6", md: "4" } },
-                  [
-                    _c(
-                      "v-card",
-                      {
-                        staticClass: "pa-2",
-                        attrs: { outlined: "", tile: "" }
-                      },
-                      [_vm._v("sidebar")]
                     )
                   ],
                   1
@@ -57602,11 +57611,9 @@ var render = function() {
               ],
               1
             )
-          ],
-          1
-        )
-      : _vm._e()
-  ])
+          : _vm._e()
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
